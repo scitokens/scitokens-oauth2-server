@@ -12,3 +12,5 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    ports:
+      - "8443:8443"
