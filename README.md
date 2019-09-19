@@ -12,6 +12,8 @@ docker build \
   --rm -t local/c7-systemd .
 ```
 
+To also install the client, add `--build-arg INSTALL_SCITOKENS_CLIENT=true`
+
 Start the image with
 
 ```sh
