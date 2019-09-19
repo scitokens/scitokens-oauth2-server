@@ -66,4 +66,42 @@ chgrp -R tomcat  /opt/tomcat/conf/Catalina
 ADD tomcat.service /etc/systemd/system/tomcat.service
 RUN systemctl enable tomcat.service
 
+RUN curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-server.war > /opt/tomcat/webapps/scitokens-server.war ;\
+mkdir -p /opt/tomcat/webapps/scitokens-server ;\
+chown tomcat:tomcat /opt/tomcat/webapps/scitokens-server ;\
+cd /opt/tomcat/webapps/scitokens-server ;\
+jar -xvf ../scitokens-server.war ;\
+mkdir -p /opt/scitokens-server/config /opt/scitokens-server/keys /opt/scitokens-server/logs ;\
+chgrp -R tomcat /opt/scitokens-server ;\
+mkdir -p /opt/tomcat/var/storage/scitokens-server ;\
+chown -R tomcat:tomcat /opt/tomcat/var/storage/scitokens-server
+
+ADD scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
+RUN chown tomcat:tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
+
+RUN yum install -y java-1.8.0-openjdk.x86_64
+RUN cd /opt/scitokens-server/keys ;\
+curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a/scitokens-util.jar > scitokens-util.jar ;\
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-1.el7_7.x86_64/jre/bin/java -jar scitokens-util.jar -batch create_keys /opt/scitokens-server/keys/scitokens.jwk ;\
+chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
+chmod 640 /opt/scitokens-server/keys/scitokens.jwk ;\
+export KID=$(grep kid /opt/scitokens-server/keys/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')
+
+ARG SCITOKENS_SERVER_ADDRESS
+ENV SCITOKENS_SERVER_ADDRESS ${SCITOKENS_SERVER_ADDRESS:-127.0.0.1:8443}
+RUN curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a/server-config.xml > /opt/scitokens-server/config/server-config.xml.tmpl
+RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/config/server-config.xml.tmpl | \
+  sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
+  sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
+  sed s+ID_GOES_HERE+${KID}+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/keys/scitokens.jwk+g | \
+  sed s+/opt/oa2/var/storage/scitokens-erver+/opt/tomcat/var/storage/scitokens-server+g | \
+  sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/config/server-config.xml ;\
+chgrp tomcat /opt/scitokens-server/config/server-config.xml
+
+RUN mkdir -p /opt/scitokens-server/bin ;\
+curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-cli.jar > /opt/scitokens-server/bin/scitokens-cli.jar ;\
+echo "#/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
+echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
+chmod +x /opt/scitokens-server/bin/scitokens-cli
+
 CMD ["/usr/sbin/init"]
