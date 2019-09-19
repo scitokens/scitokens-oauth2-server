@@ -65,16 +65,16 @@ RUN systemctl enable tomcat.service
 
 RUN curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-server.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
-chown tomcat:tomcat /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
 jar -xvf ../scitokens-server.war ;\
+chgrp -R tomcat /opt/tomcat/webapps/scitokens-server ;\
 mkdir -p /opt/scitokens-server/config /opt/scitokens-server/keys /opt/scitokens-server/logs ;\
 chgrp -R tomcat /opt/scitokens-server ;\
 mkdir -p /opt/tomcat/var/storage/scitokens-server ;\
 chown -R tomcat:tomcat /opt/tomcat/var/storage/scitokens-server
-
 ADD scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
-RUN chown tomcat:tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
+RUN chgrp tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml ;\
+chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
 RUN yum install -y java-1.8.0-openjdk.x86_64
 RUN cd /opt/scitokens-server/keys ;\
@@ -99,5 +99,31 @@ curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-
 echo "#/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
 echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
+
+ARG INSTALL_SCITOKENS_CLIENT=false
+RUN if [ "x${INSTALL_SCITOKENS_CLIENT}" == "xtrue" ] ; then echo "Installing scitokens client" >&2 ;\
+curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-client.war > /opt/tomcat/webapps/scitokens-client.war ;\
+mkdir -p /opt/tomcat/webapps/scitokens-client ;\
+cd /opt/tomcat/webapps/scitokens-client ;\
+jar -xvf ../scitokens-client.war ;\
+chgrp -R tomcat /opt/tomcat/webapps/scitokens-client ;\
+fi
+ADD scitokens-client/web.xml /opt/tomcat/webapps/scitokens-client/WEB-INF/web.xml
+RUN if [ "x${INSTALL_SCITOKENS_CLIENT}" == "xtrue" ] ; then echo "Configuring scitokens client" >&2 ;\
+RUN chgrp tomcat /opt/tomcat/webapps/scitokens-client/WEB-INF/web.xml ;\
+chmod 644 /opt/tomcat/webapps/scitokens-client/WEB-INF/web.xml ;\
+mkdir -p /opt/scitokens-client/config ;\
+curl -s -L https://raw.githubusercontent.com/scitokens/scitokens-java/master/scitokens-client/src/main/resources/sample-client-config.xml | \
+  sed s+oa4mp:scitokens.fileStore+scitokens-client+g | \
+  sed s+/path/to/logfile+/opt/tomcat/logs/scitokens-client.log+g | \
+  sed s+address.of.the.server+${SCITOKENS_SERVER_ADDRESS}+g | \
+  sed s+address.of.this.client+${SCITOKENS_SERVER_ADDRESS}+g | \
+  sed s+/path/to/storage+/opt/scitokens-client/var/filestore+g > /opt/scitokens-client/config/client-config.xml ;\
+mkdir -p /opt/scitokens-client/logs ;\
+mkdir -p /opt/scitokens-client/var/filestore ;\
+chgrp -R tomcat /opt/scitokens-client ;\
+chmod g+w /opt/scitokens-client/logs /opt/scitokens-client/var/filestore ;\
+else rm -rf /opt/tomcat/webapps/scitokens-client ;\
+fi
 
 CMD ["/usr/sbin/init"]

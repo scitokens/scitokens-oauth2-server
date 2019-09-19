@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <display-name>OAuth for MyProxy Client</display-name>
+    <!--what gets put in the browser's title bar -->
+
+
+    <servlet>
+        <servlet-name>startRequest</servlet-name>
+        <servlet-class>org.scitokens.client.STStartRequest</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>startRequest</servlet-name>
+        <url-pattern>/startRequest</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>ready</servlet-name>
+        <servlet-class>org.scitokens.client.STReadyServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ready</servlet-name>
+        <url-pattern>/ready</url-pattern>
+    </servlet-mapping>
+    <!--
+        <servlet>
+               <servlet-name>startRequest</servlet-name>
+               <servlet-class>edu.uiuc.ncsa.oa4mp.oauth2.client.servlet.OA2StartRequest</servlet-class>
+               <load-on-startup>1</load-on-startup>
+           </servlet>
+
+           <servlet-mapping>
+               <servlet-name>startRequest</servlet-name>
+               <url-pattern>/startRequest</url-pattern>
+           </servlet-mapping>
+
+
+           <servlet>
+               <servlet-name>ready</servlet-name>
+               <servlet-class>edu.uiuc.ncsa.oa4mp.oauth2.client.servlet.OA2ReadyServlet</servlet-class>
+               <load-on-startup>1</load-on-startup>
+           </servlet>
+
+           <servlet-mapping>
+               <servlet-name>ready</servlet-name>
+               <url-pattern>/ready</url-pattern>
+           </servlet-mapping>
+        -->
+    <welcome-file-list>
+        <welcome-file>
+            index.html <!--default file to be displayed at http://foo.org/client-->
+        </welcome-file>
+
+    </welcome-file-list>
+    <listener>
+        <listener-class>org.scitokens.client.STClientBootstrapper</listener-class>
+    </listener>
+
+    <!--
+         Comment the following section if you are accessing this through
+         Apache. This enables security in Tomcat
+    -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>clientSecurity</web-resource-name>
+            <url-pattern>/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <filter>
+        <filter-name>filter</filter-name>
+        <filter-class>edu.uiuc.ncsa.security.servlet.MyTomcatFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!--
+       New and improved way to specify the XML-based configuration file
+
+    -->
+    <context-param>
+        <param-name>scitokens:client.config.file</param-name>
+        <param-value>/opt/scitokens-client/config/client-config.xml</param-value>
+    </context-param>
+
+    <!-- (Optional) name of the configuration within the file to load -->
+
+   <context-param>
+       <param-name>scitokens:client.config.name</param-name>
+       <param-value>scitokens-client</param-value>
+   </context-param>
+</web-app>
+
