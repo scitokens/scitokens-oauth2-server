@@ -49,16 +49,13 @@ ADD hostkey.pem /opt/tomcat/conf/hostkey.pem
 RUN chgrp tomcat /opt/tomcat/conf/CA-bundle.pem /opt/tomcat/conf/hostcert.pem /opt/tomcat/conf/hostkey.pem ;\
 chmod g+r /opt/tomcat/conf/hostkey.pem
 
-ARG TOMCAT_ADMIN_USERNAME
-ARG TOMCAT_ADMIN_PASSWORD
-ENV TOMCAT_ADMIN_USERNAME ${TOMCAT_ADMIN_USERNAME:-admin}
-ENV TOMCAT_ADMIN_PASSWORD ${TOMCAT_ADMIN_PASSWORD:-password}
+ARG TOMCAT_ADMIN_USERNAME=admin
+ARG TOMCAT_ADMIN_PASSWORD=password
 ADD tomcat-users.xml.tmpl /opt/tomcat/conf/tomcat-users.xml.tmpl
 RUN sed s+TOMCAT_ADMIN_USERNAME+${TOMCAT_ADMIN_USERNAME}+g /opt/tomcat/conf/tomcat-users.xml.tmpl | sed s+TOMCAT_ADMIN_PASSWORD+${TOMCAT_ADMIN_PASSWORD}+g > /opt/tomcat/conf/tomcat-users.xml ;\
 chgrp tomcat /opt/tomcat/conf/tomcat-users.xml
 
-ARG TOMCAT_ADMIN_IP
-ENV TOMCAT_ADMIN_IP ${TOMCAT_ADMIN_IP:-127.0.0.1}
+ARG TOMCAT_ADMIN_IP=127.0.0.1
 ADD manager.xml.tmpl /opt/tomcat/conf/Catalina/localhost/manager.xml.tmpl
 RUN sed s+TOMCAT_ADMIN_IP+${TOMCAT_ADMIN_IP}+g /opt/tomcat/conf/Catalina/localhost/manager.xml.tmpl > /opt/tomcat/conf/Catalina/localhost/manager.xml ;\
 chgrp -R tomcat  /opt/tomcat/conf/Catalina
@@ -87,8 +84,7 @@ chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
 chmod 640 /opt/scitokens-server/keys/scitokens.jwk ;\
 export KID=$(grep kid /opt/scitokens-server/keys/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')
 
-ARG SCITOKENS_SERVER_ADDRESS
-ENV SCITOKENS_SERVER_ADDRESS ${SCITOKENS_SERVER_ADDRESS:-127.0.0.1:8443}
+ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
 RUN curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a/server-config.xml > /opt/scitokens-server/config/server-config.xml.tmpl
 RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/config/server-config.xml.tmpl | \
   sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
