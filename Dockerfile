@@ -66,7 +66,7 @@ RUN systemctl enable tomcat.service
 RUN curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-server.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
-jar -xvf ../scitokens-server.war ;\
+jar -xf ../scitokens-server.war ;\
 chgrp -R tomcat /opt/tomcat/webapps/scitokens-server ;\
 mkdir -p /opt/scitokens-server/config /opt/scitokens-server/keys /opt/scitokens-server/logs ;\
 chgrp -R tomcat /opt/scitokens-server ;\
@@ -105,7 +105,7 @@ RUN if [ "x${INSTALL_SCITOKENS_CLIENT}" == "xtrue" ] ; then echo "Installing sci
 curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-client.war > /opt/tomcat/webapps/scitokens-client.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-client ;\
 cd /opt/tomcat/webapps/scitokens-client ;\
-jar -xvf ../scitokens-client.war ;\
+jar -xf ../scitokens-client.war ;\
 chgrp -R tomcat /opt/tomcat/webapps/scitokens-client ;\
 fi
 ADD scitokens-client/web.xml /opt/tomcat/webapps/scitokens-client/WEB-INF/web.xml
