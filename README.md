@@ -9,7 +9,7 @@ docker build \
   --build-arg TOMCAT_ADMIN_PASSWORD=password \
   --build-arg TOMCAT_ADMIN_IP=127.0.0.1 \
   --build-arg SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
-  --rm -t local/c7-systemd .
+  --rm -t scitokens/c7-token-server .
 ```
 
 To also install the client, add `--build-arg INSTALL_SCITOKENS_CLIENT=true`
