@@ -43,7 +43,14 @@ ADD server.xml /opt/tomcat/conf/server.xml
 RUN chgrp -R tomcat /opt/tomcat/conf/server.xml ;\
 chmod go+r /opt/tomcat/conf/server.xml
 
-ADD CA-bundle.pem /opt/tomcat/conf/CA-bundle.pem
+ADD add-trust-root.pem /opt/tomcat/conf/add-trust-root.pem
+ADD comodo-rsa.pem /opt/tomcat/conf/comodo-rsa.pem
+ADD incommon-igtf.pem /opt/tomcat/conf/incommon-igtf.pem
+RUN cat /opt/tomcat/conf/incommon-igtf.pem /opt/tomcat/conf/comodo-rsa.pem /opt/tomcat/conf/add-trust-root.pem > /opt/tomcat/conf/CA-bundle.pem && \
+    keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/incommon-igtf.pem -alias incommon && \
+    keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/comodo-rsa.pem -alias comodo && \
+    keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/add-trust-root.pem -alias addtrust
+
 ADD hostcert.pem /opt/tomcat/conf/hostcert.pem
 ADD hostkey.pem /opt/tomcat/conf/hostkey.pem
 RUN chgrp tomcat /opt/tomcat/conf/CA-bundle.pem /opt/tomcat/conf/hostcert.pem /opt/tomcat/conf/hostkey.pem ;\
