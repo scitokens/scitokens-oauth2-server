@@ -51,9 +51,9 @@ docker-compose up --detach
 
 ## Registering a client
 
-If your `SCITOKENS_SERVER_ADDRESS` is `my.host.org` then the SciTokens server
+If your `SCITOKENS_SERVER_ADDRESS` is `my.host.org:8443` then the SciTokens server
 will be available to register clients at
-`https://my.host.org/scitokens-server/register`
+`https://my.host.org:8443/scitokens-server/register`
 
 ## Approving a client
 
@@ -102,8 +102,8 @@ exiting ...
 ## Configuring the Java Client
 
 If you installed the SciTokens Java client, then it will be available at 
-`https://my.host.org/scitokens-client`. Register the client with the server
-using the return URL `https://my.host.org/scitokens-client/ready`.
+`https://my.host.org:8443/scitokens-client`. Register the client with the server
+using the return URL `https://my.host.org:8443/scitokens-client/ready`.
 
 Then edit the client's configuration by using `docker exec` to run `/bin/bash -l`
 to open a root shell in the container. Edit the file
