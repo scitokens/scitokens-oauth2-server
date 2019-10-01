@@ -109,10 +109,13 @@ If you installed the SciTokens Java client, then it will be available at
 `https://my.host.org:8443/scitokens-client`. Register the client with the server
 using the return URL `https://my.host.org:8443/scitokens-client/ready`.
 
-Then edit the client's configuration by using `docker exec` to run `/bin/bash -l`
-to open a root shell in the container. Edit the file
-`/opt/scitokens-server/client-config.xml` and set the `CLIENT_ID` and
-`CLIENT_SECERT` to the values returned when you registered it in the server.
+Then edit the client's configuration start a login shell on the Docker container with
+```sh
+docker exec -it scitokens-docker_scitokens-tomcat_1 /bin/bash -l
+```
+Using `vi`, edit the file
+`/opt/scitokens-client/config/client-config.xml` and set the `CLIENT_ID` and
+`CLIENT_SECERT` to the values returned when you registered the client with the server.
 
 Once this has file has been edited, you need to restart tomcat with
 ```sh
