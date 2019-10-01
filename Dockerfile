@@ -106,7 +106,7 @@ chgrp tomcat /opt/scitokens-server/config/server-config.xml
 
 RUN mkdir -p /opt/scitokens-server/bin ;\
 cp /opt/scitokens-java/scitokens-cli/target/scitokens-cli-jar-with-dependencies.jar /opt/scitokens-server/bin/scitokens-cli.jar ;\
-echo "#/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
+echo "#!/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
 echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
