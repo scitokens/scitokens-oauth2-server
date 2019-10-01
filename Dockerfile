@@ -98,15 +98,14 @@ JAVA_HOME=/usr /opt/apache-maven-3.6.2/bin/mvn package -P scitokens-cli ;\
 cd /opt/scitokens-server/keys ;\
 java -jar /opt/scitokens-java/scitokens-cli/target/scitokens-util-jar-with-dependencies.jar -batch create_keys /opt/scitokens-server/keys/scitokens.jwk ;\
 chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
-chmod 640 /opt/scitokens-server/keys/scitokens.jwk ;\
-export KID=$(grep kid /opt/scitokens-server/keys/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')
+chmod 640 /opt/scitokens-server/keys/scitokens.jwk
 
 ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
 RUN curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a/server-config.xml > /opt/scitokens-server/config/server-config.xml.tmpl
 RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/config/server-config.xml.tmpl | \
   sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
   sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
-  sed s+ID_GOES_HERE+${KID}+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/keys/scitokens.jwk+g | \
+  sed s+ID_GOES_HERE+$(grep kid /opt/scitokens-server/keys/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/keys/scitokens.jwk+g | \
   sed s+/opt/oa2/var/storage/scitokens-erver+/opt/tomcat/var/storage/scitokens-server+g | \
   sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/config/server-config.xml ;\
 chgrp tomcat /opt/scitokens-server/config/server-config.xml
