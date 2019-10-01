@@ -65,13 +65,17 @@ docker exec -it scitokens-docker_scitokens-tomcat_1 /opt/scitokens-server/bin/sc
 which launches the command line interface. Documentation for the CLI is
 available in the [OA4MP CLI documentation](http://grid.ncsa.illinois.edu/myproxy/oauth/server/manuals/cli.xhtml).
 
-An example session is shown below. First issue the `use clients` command,
-followed by `ls` to list available clients.
+First issue the `use clients` command,
+followed by `ls` to list available clients. Clients that are not approved are 
+flagged with `(N)` in the second column. To approve a client you need the 
+`client_id_string` which is in the third column (before the client name).
 
-Next run `approve /clientid` (note the `/` at the start of the client ID which
-is not printed by `ls`). Provide an approver name (free-form string) and set
-the client to approved and save.
+Next run `approve /client_id_string` (note the `/` at the start of 
+the `client_id_string` which is not printed by `ls`). Provide an 
+approver name (which is a free-form string), set the client to approved,
+and save.
 
+An example session is shown below.
 ```
 *************************************************************
 * OA4MP2 OAuth 2/OIDC CLI (Command Line Interpreter)        *
