@@ -55,6 +55,11 @@ If your `SCITOKENS_SERVER_ADDRESS` is `my.host.org:8443` then the SciTokens serv
 will be available to register clients at
 `https://my.host.org:8443/scitokens-server/register`
 
+Go to the appropriate URL and register a client. An example for registering
+the Java client is shown below.
+
+![Scitokens Server Client Registration](scitokens-server-screen.png)
+
 ## Approving a client
 
 Once a client has been registered, it needs to be approved. This can be done
