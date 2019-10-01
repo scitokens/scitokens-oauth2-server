@@ -114,8 +114,8 @@ Then edit the client's configuration start a login shell on the Docker container
 docker exec -it scitokens-docker_scitokens-tomcat_1 /bin/bash -l
 ```
 Using `vi`, edit the file
-`/opt/scitokens-client/config/client-config.xml` and set the `CLIENT_ID` and
-`CLIENT_SECERT` to the values returned when you registered the client with the server.
+`/opt/scitokens-client/config/client-config.xml` and set the `CLIENT_IDENTIFIER` and
+`CLIENT_SECRET` to the values returned when you registered the client with the server.
 
 Once this has file has been edited, you need to restart tomcat with
 ```sh
