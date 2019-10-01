@@ -60,7 +60,7 @@ will be available to register clients at
 Once a client has been registered, it needs to be approved. This can be done
 by running
 ```sh
-docker exec -it server-base_scitokens-tomcat_1 /opt/scitokens-server/bin/scitokens-cli
+docker exec -it scitokens-docker_scitokens-tomcat_1 /opt/scitokens-server/bin/scitokens-cli
 ```
 which launches the command line interface. Documentation for the CLI is
 available in the [OA4MP CLI documentation](http://grid.ncsa.illinois.edu/myproxy/oauth/server/manuals/cli.xhtml).
