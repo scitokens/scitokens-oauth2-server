@@ -67,7 +67,7 @@ the Java client is shown below.
 Once a client has been registered, it needs to be approved. This can be done
 by running
 ```sh
-docker exec -it scitokens-docker_scitokens-tomcat_1 /opt/scitokens-server/bin/scitokens-cli
+docker exec -it docker-scitokens-java_scitokens-tomcat_1 /opt/scitokens-server/bin/scitokens-cli
 ```
 which launches the command line interface. Documentation for the CLI is
 available in the [OA4MP CLI documentation](http://grid.ncsa.illinois.edu/myproxy/oauth/server/manuals/cli.xhtml).
@@ -118,7 +118,7 @@ using the callback URL `https://my.host.org:8443/scitokens-client/ready`.
 
 Then edit the client's configuration start a login shell on the Docker container with
 ```sh
-docker exec -it scitokens-docker_scitokens-tomcat_1 /bin/bash -l
+docker exec -it docker-scitokens-java_scitokens-tomcat_1 /bin/bash -l
 ```
 Using `vi`, edit the file
 `/opt/scitokens-client/config/client-config.xml` and set the `CLIENT_IDENTIFIER` and
