@@ -43,7 +43,9 @@ To also install the client, add `--build-arg INSTALL_SCITOKENS_CLIENT=true`
 
 ## Starting the Docker Image
 
-Start the image with
+Edit the file `docker-compose.yml` and change the default `hostname` and
+`domainname` (currently localhost.localdomain) to appropriate values for the
+machine that you are using, then start the docker container with
 
 ```sh
 docker-compose up --detach
