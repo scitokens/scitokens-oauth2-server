@@ -114,7 +114,7 @@ exiting ...
 
 If you installed the SciTokens Java client, then it will be available at 
 `https://my.host.org:8443/scitokens-client`. Register the client with the server
-using the return URL `https://my.host.org:8443/scitokens-client/ready`.
+using the callback URL `https://my.host.org:8443/scitokens-client/ready`.
 
 Then edit the client's configuration start a login shell on the Docker container with
 ```sh
