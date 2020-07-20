@@ -70,7 +70,7 @@ chgrp -R tomcat  /opt/tomcat/conf/Catalina
 ADD tomcat.service /etc/systemd/system/tomcat.service
 RUN systemctl enable tomcat.service
 
-RUN curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-server.war > /opt/tomcat/webapps/scitokens-server.war ;\
+RUN curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v1.2/scitokens-server.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
 jar -xf ../scitokens-server.war ;\
@@ -83,20 +83,9 @@ ADD scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xm
 RUN chgrp tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml ;\
 chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
-RUN curl -L -s https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.2/apache-maven-3.6.2-bin.tar.gz | tar -C /opt -zxf - ;\
-yum install -y git ;\
-cd /opt ;\
-git clone https://github.com/scitokens/scitokens-java.git ;\
-cd scitokens-java ;\
-mv pom.xml pom.xml.orig ;\
-sed 's+<!-- Java 8 specific or empty javadoc tags make the build fail -->+<source>8</source>+g' pom.xml.orig > pom.xml ;\
-cd scitokens-common ;\
-JAVA_HOME=/usr /opt/apache-maven-3.6.2/bin/mvn package ;\
-cd ../scitokens-cli ;\
-JAVA_HOME=/usr /opt/apache-maven-3.6.2/bin/mvn package -P scitokens-util ;\
-JAVA_HOME=/usr /opt/apache-maven-3.6.2/bin/mvn package -P scitokens-cli ;\
-cd /opt/scitokens-server/keys ;\
-java -jar /opt/scitokens-java/scitokens-cli/target/scitokens-util-jar-with-dependencies.jar -batch create_keys /opt/scitokens-server/keys/scitokens.jwk ;\
+RUN mkdir -p /opt/scitokens-java/scitokens-cli ;\
+curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v1.2/scitokens-util.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
+java -jar /opt/scitokens-java/scitokens-cli/scitokens-util.jar -batch create_keys /opt/scitokens-server/keys/scitokens.jwk ;\
 chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
 chmod 640 /opt/scitokens-server/keys/scitokens.jwk
 
@@ -111,14 +100,14 @@ RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/con
 chgrp tomcat /opt/scitokens-server/config/server-config.xml
 
 RUN mkdir -p /opt/scitokens-server/bin ;\
-cp /opt/scitokens-java/scitokens-cli/target/scitokens-cli-jar-with-dependencies.jar /opt/scitokens-server/bin/scitokens-cli.jar ;\
+curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v1.2/scitokens-cli.jar >/opt/scitokens-server/bin/scitokens-cli.jar ;\
 echo "#!/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
 echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
 ARG INSTALL_SCITOKENS_CLIENT=false
 RUN if [ "x${INSTALL_SCITOKENS_CLIENT}" == "xtrue" ] ; then echo "Installing scitokens client" >&2 ;\
-curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a-1/scitokens-client.war > /opt/tomcat/webapps/scitokens-client.war ;\
+curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v1.2/scitokens-client.war > /opt/tomcat/webapps/scitokens-client.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-client ;\
 cd /opt/tomcat/webapps/scitokens-client ;\
 jar -xf ../scitokens-client.war ;\
