@@ -35,7 +35,7 @@ docker build \
   --build-arg TOMCAT_ADMIN_USERNAME=admin \
   --build-arg TOMCAT_ADMIN_PASSWORD=password \
   --build-arg TOMCAT_ADMIN_IP=127.0.0.1 \
-  --build-arg SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
+  --build-arg SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443 \
   --rm -t scitokens/c7-token-server .
 ```
 
