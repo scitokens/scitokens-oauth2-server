@@ -83,7 +83,7 @@ ADD scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xm
 RUN chgrp tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml ;\
 chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
-RUN curl -L -s http://apache.mirrors.hoobly.com/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz | tar -C /opt -zxf - ;\
+RUN curl -L -s https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.2/apache-maven-3.6.2-bin.tar.gz | tar -C /opt -zxf - ;\
 yum install -y git ;\
 cd /opt ;\
 git clone https://github.com/scitokens/scitokens-java.git ;\
