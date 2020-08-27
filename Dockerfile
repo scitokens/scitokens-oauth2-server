@@ -11,9 +11,9 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
-RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make
-RUN alternatives --set java /usr/lib/jvm/java-11-openjdk-11.0.5.10-0.el7_7.x86_64/bin/java ;\
-alternatives --set javac /usr/lib/jvm/java-11-openjdk-11.0.5.10-0.el7_7.x86_64/bin/javac
+RUN yum install -y curl java-11-openjdk-11.0.8.10-0.el7_8.x86_64 java-11-openjdk-devel-11.0.8.10-0.el7_8.x86_64 openssl-devel apr-devel gcc gcc-c++ make
+RUN alternatives --set java /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/bin/java && \
+alternatives --set javac /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/bin/javac
 
 RUN useradd -r -s /sbin/nologin tomcat ;\
 mkdir -p /opt/tomcat ;\
@@ -29,9 +29,9 @@ chmod g+r /opt/tomcat/bin/*
 RUN cd /opt/tomcat/bin ;\
 tar -zxvf tomcat-native.tar.gz ;\
 cd tomcat-native-1.2.23-src/native ;\
-ls -ald /usr/lib/jvm/java-11-openjdk-11.0.5.10-0.el7_7.x86_64/ ;\
-ls -al /usr/lib/jvm/java-11-openjdk-11.0.5.10-0.el7_7.x86_64/ ;\
-./configure --with-apr=/usr/bin/apr-1-config --with-java-home=/usr/lib/jvm/java-11-openjdk-11.0.5.10-0.el7_7.x86_64 --with-os-type=include/linux --with-ssl=yes --prefix=/opt/tomcat ;\
+ls -ald /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/ ;\
+ls -al /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/ ;\
+./configure --with-apr=/usr/bin/apr-1-config --with-java-home=/usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64 --with-os-type=include/linux --with-ssl=yes --prefix=/opt/tomcat ;\
 mv Makefile Makefile.org ;\
 sed s+/include/include/linux+/include/linux+g Makefile.org > Makefile ;\
 make ;\
