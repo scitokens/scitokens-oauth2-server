@@ -1,18 +1,21 @@
 version: '3'
 services:
   scitokens-tomcat:
-    image: scitokens/c7-token-server
-    privileged: true
-    cap_add:
-      - SYS_ADMIN
-    security_opt:
-      - seccomp:unconfined
-    tmpfs:
-      - /run
-      - /run/lock
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    build: .
+
+    #image: scitokens/c7-token-server
+    #privileged: true
+    #cap_add:
+    #  - SYS_ADMIN
+    #security_opt:
+    #  - seccomp:unconfined
+    #tmpfs:
+    #  - /run
+    #  - /run/lock
+    #volumes:
+    #  - /sys/fs/cgroup:/sys/fs/cgroup:ro
     ports:
       - "8443:8443"
-    hostname: localhost.localdomain
-    domainname: localdomain
+      - "8080:8080"
+    #hostname: localhost.localdomain
+    #domainname: localdomain
