@@ -136,6 +136,8 @@ fi
 
 RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 
+ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
+
 #CMD ["/usr/sbin/ini"]
 USER tomcat:tomcat
 
