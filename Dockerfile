@@ -1,19 +1,19 @@
 FROM centos:7
 ENV container docker
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
-rm -f /lib/systemd/system/local-fs.target.wants/*; \
-rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
-rm -f /lib/systemd/system/anaconda.target.wants/*;
-VOLUME [ "/sys/fs/cgroup" ]
+#RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+#systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+#rm -f /lib/systemd/system/multi-user.target.wants/*;\
+#rm -f /etc/systemd/system/*.wants/*;\
+#rm -f /lib/systemd/system/local-fs.target.wants/*; \
+#rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+#rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+#rm -f /lib/systemd/system/basic.target.wants/*;\
+#rm -f /lib/systemd/system/anaconda.target.wants/*;
+#VOLUME [ "/sys/fs/cgroup" ]
 
-RUN yum install -y curl java-11-openjdk-11.0.8.10-0.el7_8.x86_64 java-11-openjdk-devel-11.0.8.10-0.el7_8.x86_64 openssl-devel apr-devel gcc gcc-c++ make
-RUN alternatives --set java /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/bin/java && \
-alternatives --set javac /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/bin/javac
+RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make
+#RUN alternatives --set java /usr/lib/jvm/java-11-openjdk/bin/java && \
+#alternatives --set javac /usr/lib/jvm/java-11-openjdk/bin/javac
 
 RUN useradd -r -s /sbin/nologin tomcat ;\
 mkdir -p /opt/tomcat ;\
@@ -51,6 +51,7 @@ RUN cat /opt/tomcat/conf/incommon-igtf.pem /opt/tomcat/conf/comodo-rsa.pem /opt/
     keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/comodo-rsa.pem -alias comodo && \
     keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/add-trust-root.pem -alias addtrust
 
+# Change into volume mount
 ADD hostcert.pem /opt/tomcat/conf/hostcert.pem
 ADD hostkey.pem /opt/tomcat/conf/hostkey.pem
 RUN chgrp tomcat /opt/tomcat/conf/CA-bundle.pem /opt/tomcat/conf/hostcert.pem /opt/tomcat/conf/hostkey.pem ;\
@@ -67,10 +68,10 @@ ADD manager.xml.tmpl /opt/tomcat/conf/Catalina/localhost/manager.xml.tmpl
 RUN sed s+TOMCAT_ADMIN_IP+${TOMCAT_ADMIN_IP}+g /opt/tomcat/conf/Catalina/localhost/manager.xml.tmpl > /opt/tomcat/conf/Catalina/localhost/manager.xml ;\
 chgrp -R tomcat  /opt/tomcat/conf/Catalina
 
-ADD tomcat.service /etc/systemd/system/tomcat.service
-RUN systemctl enable tomcat.service
+#ADD tomcat.service /etc/systemd/system/tomcat.service
+#RUN systemctl enable tomcat.service
 
-RUN curl -s -L https://github.com/scitokens/scitokens-java/releases/download/v1.2.1/scitokens-server.war > /opt/tomcat/webapps/scitokens-server.war ;\
+RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.0/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
 jar -xf ../scitokens-server.war ;\
@@ -83,12 +84,14 @@ ADD scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xm
 RUN chgrp tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml ;\
 chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
+# Make JWK a volume mount
 RUN mkdir -p /opt/scitokens-java/scitokens-cli ;\
-curl -s -L  https://github.com/scitokens/scitokens-java/releases/download/v1.2.1/scitokens-util.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
-java -jar /opt/scitokens-java/scitokens-cli/scitokens-util.jar -batch create_keys /opt/scitokens-server/keys/scitokens.jwk ;\
+curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.0/jwt.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
+java -jar /opt/scitokens-java/scitokens-cli/scitokens-util.jar -batch create_keys -out /opt/scitokens-server/keys/scitokens.jwk ;\
 chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
 chmod 640 /opt/scitokens-server/keys/scitokens.jwk
 
+# Make server configuration a volume mount
 ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
 RUN curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a/server-config.xml > /opt/scitokens-server/config/server-config.xml.tmpl
 RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/config/server-config.xml.tmpl | \
@@ -100,7 +103,7 @@ RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/con
 chgrp tomcat /opt/scitokens-server/config/server-config.xml
 
 RUN mkdir -p /opt/scitokens-server/bin ;\
-curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v1.2.1/scitokens-cli.jar >/opt/scitokens-server/bin/scitokens-cli.jar ;\
+curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2.0/oa2-cli.jar >/opt/scitokens-server/bin/scitokens-cli.jar ;\
 echo "#!/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
 echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
@@ -131,4 +134,22 @@ chmod g+w /opt/scitokens-client/logs /opt/scitokens-client/var/filestore ;\
 else rm -rf /opt/tomcat/webapps/scitokens-client ;\
 fi
 
-CMD ["/usr/sbin/init"]
+RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
+
+ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
+
+#CMD ["/usr/sbin/ini"]
+USER tomcat:tomcat
+
+ENV JAVA_HOME=/usr/lib/jvm/jre
+ENV CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+ENV CATALINA_HOME=/opt/tomcat
+ENV CATALINA_BASE=/opt/tomcat
+ENV CATALINA_OPTS="-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+ENV JAVA_OPTS="-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Djava.library.path=/opt/tomcat/lib"
+
+
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+
+
+
