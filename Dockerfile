@@ -86,24 +86,24 @@ chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
 # Make JWK a volume mount
 RUN mkdir -p /opt/scitokens-java/scitokens-cli ;\
-curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.0/jwt.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
+curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.1/jwt.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
 java -jar /opt/scitokens-java/scitokens-cli/scitokens-util.jar -batch create_keys -out /opt/scitokens-server/keys/scitokens.jwk ;\
 chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
 chmod 640 /opt/scitokens-server/keys/scitokens.jwk
 
 # Make server configuration a volume mount
 ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
-RUN curl -L -s https://github.com/scitokens/scitokens-java/releases/download/v.1.2a/server-config.xml > /opt/scitokens-server/config/server-config.xml.tmpl
-RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/config/server-config.xml.tmpl | \
+RUN curl -L -s https://github.com/scitokens/docker-scitokens-java/releases/latest/scitokens-server/etc/server-config.xml > /opt/scitokens-server/etc/server-config.xml.tmpl
+RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc/server-config.xml.tmpl | \
   sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
   sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
   sed s+ID_GOES_HERE+$(grep kid /opt/scitokens-server/keys/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/keys/scitokens.jwk+g | \
   sed s+/opt/oa2/var/storage/scitokens-erver+/opt/tomcat/var/storage/scitokens-server+g | \
-  sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/config/server-config.xml ;\
-chgrp tomcat /opt/scitokens-server/config/server-config.xml
+  sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/etc/server-config.xml ;\
+chgrp tomcat /opt/scitokens-server/etc/server-config.xml
 
 RUN mkdir -p /opt/scitokens-server/bin ;\
-curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2.0/oa2-cli.jar >/opt/scitokens-server/bin/scitokens-cli.jar ;\
+curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2.1/oa2-cli.jar >/opt/scitokens-server/bin/scitokens-cli.jar ;\
 echo "#!/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
 echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli

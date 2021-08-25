@@ -5,7 +5,7 @@
     "explicitly granted. These will simply be returned as the scope in the access token.",
     "https://wiki.refeds.org/display/STAN/eduPerson+2020-01#eduPerson202001-eduPersonEntitlement"
   ],
-  "deweitzel2@unl.edu": {
+  "dweitzel2@unl.edu": {
     "eduPersonEntitlement": [
       "storage.read:/home/some_group/dweitzel",
       "storage.write:/home/some_group/dweitzel"
