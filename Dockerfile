@@ -93,7 +93,7 @@ chmod 640 /opt/scitokens-server/keys/scitokens.jwk
 
 # Make server configuration a volume mount
 ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
-RUN curl -L -s https://github.com/scitokens/docker-scitokens-java/releases/latest/scitokens-server/etc/server-config.xml > /opt/scitokens-server/etc/server-config.xml.tmpl
+ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
 RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc/server-config.xml.tmpl | \
   sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
   sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
