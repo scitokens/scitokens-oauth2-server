@@ -227,7 +227,7 @@
 
     <context-param>
         <param-name>scitokens:server.config.file</param-name>
-        <param-value>/opt/scitokens-server/config/server-config.xml</param-value>
+        <param-value>/opt/scitokens-server/etc/server-config.xml</param-value>
     </context-param>
 
 
