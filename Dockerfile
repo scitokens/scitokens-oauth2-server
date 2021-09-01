@@ -71,25 +71,23 @@ chgrp -R tomcat  /opt/tomcat/conf/Catalina
 #ADD tomcat.service /etc/systemd/system/tomcat.service
 #RUN systemctl enable tomcat.service
 
+COPY --chown=tomcat:tomcat scitokens-server /opt
 RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.0/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
 jar -xf ../scitokens-server.war ;\
 chgrp -R tomcat /opt/tomcat/webapps/scitokens-server ;\
-mkdir -p /opt/scitokens-server/config /opt/scitokens-server/keys /opt/scitokens-server/logs ;\
-chgrp -R tomcat /opt/scitokens-server ;\
 mkdir -p /opt/tomcat/var/storage/scitokens-server ;\
 chown -R tomcat:tomcat /opt/tomcat/var/storage/scitokens-server
-ADD scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
-RUN chgrp tomcat /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml ;\
-chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
+COPY --chown=tomcat:tomcat scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
+RUN chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
 # Make JWK a volume mount
-RUN mkdir -p /opt/scitokens-java/scitokens-cli ;\
-curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.1/jwt.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
-java -jar /opt/scitokens-java/scitokens-cli/scitokens-util.jar -batch create_keys -out /opt/scitokens-server/keys/scitokens.jwk ;\
-chgrp tomcat /opt/scitokens-server/keys/scitokens.jwk ;\
-chmod 640 /opt/scitokens-server/keys/scitokens.jwk
+#RUN mkdir -p /opt/scitokens-java/scitokens-cli ;\
+#curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.1/jwt.jar > /opt/scitokens-java/scitokens-cli/scitokens-util.jar ;\
+#java -jar /opt/scitokens-java/scitokens-cli/scitokens-util.jar -batch create_keys -out /opt/scitokens-server/etc/scitokens.jwk ;\
+#chgrp tomcat /opt/scitokens-server/etc/scitokens.jwk ;\
+#chmod 640 /opt/scitokens-server/etc/scitokens.jwk
 
 # Make server configuration a volume mount
 ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
@@ -97,7 +95,7 @@ ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-conf
 RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc/server-config.xml.tmpl | \
   sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
   sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
-  sed s+ID_GOES_HERE+$(grep kid /opt/scitokens-server/keys/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/keys/scitokens.jwk+g | \
+#  sed s+ID_GOES_HERE+$(grep kid /opt/scitokens-server/etc/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/etc/scitokens.jwk+g | \
   sed s+/opt/oa2/var/storage/scitokens-erver+/opt/tomcat/var/storage/scitokens-server+g | \
   sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/etc/server-config.xml ;\
 chgrp tomcat /opt/scitokens-server/etc/server-config.xml
