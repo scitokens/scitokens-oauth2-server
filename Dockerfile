@@ -83,10 +83,11 @@ COPY --chown=tomcat:tomcat scitokens-server/web.xml /opt/tomcat/webapps/scitoken
 RUN chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
 # Make JWK a volume mount
-RUN mkdir -p /opt/scitokens-java/bin && mkdir -p /opt/scitokens-java/etc && mkdir -p /opt/scitokens-java/lib && mkdir -p /opt/scitokens-java/log && mkdir -p /opt/scitokens-java/var/qdl/scitokens && mkdir -p /opt/scitokens-java/var/storage/file_store
+RUN mkdir -p /opt/scitokens-server/bin && mkdir -p /opt/scitokens-server/etc && mkdir -p /opt/scitokens-server/lib && mkdir -p /opt/scitokens-server/log && mkdir -p /opt/scitokens-server/var/qdl/scitokens && mkdir -p /opt/scitokens-server/var/storage/file_store
 
 # Create a single key in the etc directory for signing
-RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/jwt.jar > /opt/scitokens-server/jwt.jar ;\
+
+RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/jwt.jar > /opt/scitokens-server/lib/jwt.jar ;\
 java -jar /opt/scitokens-server/lib/jwt.jar -batch create_keys -simple -out /opt/scitokens-server/etc/keys.jwk ;\
 chgrp tomcat /opt/scitokens-server/etc/keys.jwk ;\
 chmod 640 /opt/scitokens-server/etc/keys.jwk
