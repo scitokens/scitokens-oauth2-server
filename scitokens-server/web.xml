@@ -171,7 +171,7 @@
        Uncomment the next section if you are replacing the built-in authorization module with your own.
        Look here for the details: http://grid.ncsa.illinois.edu/myproxy/oauth/server/manuals/remote-user.xhtml
     -->
-       <security-constraint>
+<!--       <security-constraint>
           <web-resource-collection>
             <web-resource-name>OAuth Security</web-resource-name>
             <url-pattern>/authorize</url-pattern>
@@ -182,14 +182,14 @@
             <role-name>oa4mp-user</role-name>
           </auth-constraint>
           <user-data-constraint>
-          <!-- transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE -->
+          &lt;!&ndash; transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE &ndash;&gt;
           <transport-guarantee>NONE</transport-guarantee>
           </user-data-constraint>
         </security-constraint>
 
         <login-config>
         <auth-method>BASIC</auth-method>
-        </login-config>
+        </login-config>-->
     <!--
        <resource-ref>
            <description>

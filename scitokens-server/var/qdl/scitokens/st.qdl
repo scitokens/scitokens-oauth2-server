@@ -1,6 +1,10 @@
 /*
    Basic script to fetch the capabilities for a user (by eppn here) and
    put it in the scopes for the access token.
+
+   client's cfg attribute:
+
+
 */
 
                EPE := 'eduPersonEntitlement';

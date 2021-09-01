@@ -18,8 +18,8 @@
              address="https://localhost:8443/scitokens-server">
 
         <logging
-                logFileName="/opt/scitokens-server/log/oa4mp.xml"
-                logName="oa4mp"
+                logFileName="/opt/scitokens-server/log/scitokens-server.log"
+                logName="scitokens-server"
                 logSize="100000"
                 logFileCount="2"
                 debug="true"/>
@@ -28,7 +28,7 @@
                               requireHeader="true"
                               headerFieldName="REMOTE_USER"
         />
-        <JSONWebKey defaultKeyID="EC9FCFCB3716AC4C2279DF42EC98CABF">
+        <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>
         </JSONWebKey>
         <authorizationServlet authorizationURI="https://localhost:8443/oauth2/authorize"/>
@@ -36,9 +36,9 @@
                 verificationURI="https://localhost:8443/oauth2/device"
                 interval="5"
                 codeChars="0123456789ABCDEFX"
-                codeLength="12"
-                codeSeparator="+"
-                codePeriodLength="4"
+                codeLength="9"
+                codeSeparator="_"
+                codePeriodLength="3"
         />
 
         <clientManagement>
