@@ -103,11 +103,8 @@ RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc
   sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/etc/server-config.xml ;\
 chgrp tomcat /opt/scitokens-server/etc/server-config.xml
 
-ADD scitokens-server/bin/scitokens-server-cli /opt/scitokens-server/bin/scitokens-server-cli.tmpl
-RUN mkdir -p /opt/scitokens-server/bin ;\
-curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
-echo "#!/bin/bash" > /opt/scitokens-server/bin/scitokens-cli ;\
-echo "java -jar /opt/scitokens-server/bin/scitokens-cli.jar -cfg /opt/scitokens-server/config/server-config.xml -name scitokens-server" >> /opt/scitokens-server/bin/scitokens-cli ;\
+ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
 # ARG INSTALL_SCITOKENS_CLIENT=false

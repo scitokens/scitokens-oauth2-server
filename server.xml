@@ -105,8 +105,9 @@
          Either JSSE or OpenSSL style configuration may be used. OpenSSL style
          configuration is used below.
     -->
-    <Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
-               maxThreads="150" SSLEnabled="true" >
+    <Connector port="8443" protocol="HTTP/1.1"
+	    maxThreads="150" SSLEnabled="true"
+	    scheme="https" secure="true" URIEncoding="UTF-8">
         <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
         <SSLHostConfig>
             <Certificate certificateKeyFile="conf/hostkey.pem"
