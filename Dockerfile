@@ -51,12 +51,6 @@ RUN cat /opt/tomcat/conf/incommon-igtf.pem /opt/tomcat/conf/comodo-rsa.pem /opt/
     keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/comodo-rsa.pem -alias comodo && \
     keytool -cacerts -importcert -noprompt -storepass changeit -file /opt/tomcat/conf/add-trust-root.pem -alias addtrust
 
-# Change into volume mount
-ADD hostcert.pem /opt/tomcat/conf/hostcert.pem
-ADD hostkey.pem /opt/tomcat/conf/hostkey.pem
-RUN chgrp tomcat /opt/tomcat/conf/CA-bundle.pem /opt/tomcat/conf/hostcert.pem /opt/tomcat/conf/hostkey.pem ;\
-chmod g+r /opt/tomcat/conf/hostkey.pem
-
 ARG TOMCAT_ADMIN_USERNAME=admin
 ARG TOMCAT_ADMIN_PASSWORD=password
 ADD tomcat-users.xml.tmpl /opt/tomcat/conf/tomcat-users.xml.tmpl
@@ -112,7 +106,6 @@ RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
 
 #CMD ["/usr/sbin/ini"]
-USER tomcat:tomcat
 
 ENV JAVA_HOME=/usr/lib/jvm/jre
 ENV CATALINA_PID=/opt/tomcat/temp/tomcat.pid
