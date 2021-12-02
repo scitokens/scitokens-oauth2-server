@@ -226,13 +226,13 @@
     </error-page>
 
     <context-param>
-        <param-name>oa4mp:server.config.file</param-name>
+        <param-name>oa4mp:oauth2.server.config.file</param-name>
         <param-value>/opt/scitokens-server/etc/server-config.xml</param-value>
     </context-param>
 
 
     <context-param>
-        <param-name>oa4mp:server.config.name</param-name>
+        <param-name>oa4mp:oauth2.server.config.name</param-name>
         <param-value>scitokens-server</param-value>
     </context-param>
 

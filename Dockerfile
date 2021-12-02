@@ -76,6 +76,9 @@ chown -R tomcat:tomcat /opt/tomcat/var/storage/scitokens-server
 COPY --chown=tomcat:tomcat scitokens-server/web.xml /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 RUN chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 
+# need to put the java mail jar into the tomcat lib directory
+RUN curl -s -L https://github.com/javaee/javamail/releases/download/JAVAMAIL-1_6_2/javax.mail.jar > /opt/tomcat/lib/javax.mail.jar
+
 # Make JWK a volume mount
 RUN mkdir -p /opt/scitokens-server/bin && mkdir -p /opt/scitokens-server/etc && mkdir -p /opt/scitokens-server/lib && mkdir -p /opt/scitokens-server/log && mkdir -p /opt/scitokens-server/var/qdl/scitokens && mkdir -p /opt/scitokens-server/var/storage/file_store
 
