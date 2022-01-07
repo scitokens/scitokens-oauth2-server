@@ -15,7 +15,8 @@
              OIDCEnabled = "false"
              serverDN="CN=localhost"
              issuer="https://localhost:8443/scitokens-server"
-             address="https://localhost:8443/scitokens-server">
+             address="https://localhost:8443/scitokens-server"
+             demoModeEnabled="true">
 
         <logging
                 logFileName="/opt/scitokens-server/log/scitokens-server.log"
