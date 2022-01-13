@@ -48,8 +48,7 @@
            <api protocol="oa4mp" enable="false" />
         </clientManagement>
 
-        <fileStore dataPath="/opt/scitokens-server/var/storage/file_store/data"
-                   indexPath="/opt/scitokens-server/var/storage/file_store/index">
+        <fileStore path="/opt/scitokens-server/var/storage/file_store">
             <clients/>
             <clientApprovals/>
             <transactions/>
