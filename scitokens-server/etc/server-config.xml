@@ -23,7 +23,7 @@
                 logName="scitokens-server"
                 logSize="100000"
                 logFileCount="2"
-                debug="true"/>
+                debug="trace"/>
 
         <authorizationServlet useHeader="true"
                               requireHeader="true"
@@ -32,9 +32,9 @@
         <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>
         </JSONWebKey>
-        <authorizationServlet authorizationURI="https://localhost:8443/oauth2/authorize"/>
+        <authorizationServlet authorizationURI="https://localhost:8443/scitokens-server/authorize"/>
         <deviceFlowServlet
-                verificationURI="https://localhost:8443/oauth2/device"
+                verificationURI="https://localhost:8443/scitokens-server/device"
                 interval="5"
                 codeChars="0123456789ABCDEFX"
                 codeLength="9"
@@ -43,7 +43,12 @@
         />
 
         <clientManagement>
-           <api protocol="rfc7951" enable="true" endpoint="oidc-cm"/>
+           <api protocol="rfc7951"
+                enable="true"
+                endpoint="oidc-cm"
+                anonymousOK="true"
+                template="localhost:template"
+           />
            <api protocol="rfc7952" enable="true" endpoint="oidc-cm"/>
            <api protocol="oa4mp" enable="false" />
         </clientManagement>
