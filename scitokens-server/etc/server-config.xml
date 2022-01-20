@@ -25,10 +25,12 @@
                 logFileCount="2"
                 debug="trace"/>
 
-        <authorizationServlet useHeader="true"
+<!--
+     <authorizationServlet useHeader="true"
                               requireHeader="true"
                               headerFieldName="REMOTE_USER"
         />
+-->
         <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>
         </JSONWebKey>
@@ -43,15 +45,15 @@
         />
 
         <clientManagement>
-           <api protocol="rfc7951"
+           <api protocol="rfc7591"
                 enabled="true"
                 endpoint="oidc-cm"
                 anonymousOK="true"
                 autoApprove="true"
                 template="localhost:template"
            />
-           <api protocol="rfc7952" enable="true" endpoint="oidc-cm"/>
-           <api protocol="oa4mp" enable="false" />
+           <api protocol="rfc7592" enabled="true" endpoint="oidc-cm"/>
+           <api protocol="oa4mp" enabled="false" />
         </clientManagement>
 
         <fileStore path="/opt/scitokens-server/var/storage/file_store">

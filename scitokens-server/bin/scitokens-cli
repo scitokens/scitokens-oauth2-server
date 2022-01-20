@@ -6,10 +6,10 @@
 # different from the standard install.
 
 OA2_ROOT=/opt/scitokens-server
-DEFAULT_CONFIG=$OA2_ROOT/etc/server-cfg.xml
+DEFAULT_CONFIG=$OA2_ROOT/etc/server-config.xml
 DEFAULT_TARGET=scitokens-server
-oa2jar=$OA2_ROOT/lib/scitokens-server-cli.jar
-logFile=$OA2_ROOT/var/log/scitokens-server-cli.log
+oa2jar=$OA2_ROOT/lib/scitokens-cli.jar
+logFile=$OA2_ROOT/var/log/scitokens--cli.log
 DEFAULT_ENV=$OA2_ROOT/etc/cli.properties
 
 # End of user serviceable parts.
