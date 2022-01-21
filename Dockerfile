@@ -104,7 +104,7 @@ ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
 RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
-ADD scitokens-server/etc/client-template.xml /opt/scitokens-server/bin/client-template.xml
+ADD "scitokens-server/etc/client-template.xml" "/opt/scitokens-server/bin/client-template.xml"
 
 RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 
@@ -128,15 +128,14 @@ ADD qdl/readme.txt /opt/qdl/readme.txt
 ADD qdl/etc/qdl.properties /opt/qdl/etc/qdl.properties
 ADD qdl/etc/qdl-cfg.xml /opt/qdl/etc/qdl-cfg.xml
 ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
+ADD qdl/var/scripts/boot.qdl /opt/qdl/var/scripts/boot.qdl
+RUN chmod +x /opt/qdl/var/scripts/boot.qdl
 
 ADD qdl/bin/qdl /opt/qdl/bin/qdl
 RUN chmod +x /opt/qdl/bin/qdl
 
 ADD qdl/bin/qdl-run /opt/qdl/bin/qdl-run
 RUN chmod +x /opt/qdl/bin/qdl-run
-
-ADD qdl/var/scripts/boot.qdl /opt/qdl/var/scripts/boot.qdl
-RUN chmod +x /opt/qdl/var/scripts/boot.qdl
 # END QDL support
 
 
@@ -153,6 +152,9 @@ ENV QDL_HOME="/opt/qdl"
 ENV PATH="${ST_HOME}/bin:${QDL_HOME}/bin:${PATH}"
 
 RUN "${QDL_HOME}/var/scripts/boot.qdl"
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+
+# RUN "${QDL_HOME}/var/scripts/boot.qdl"
 
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 
