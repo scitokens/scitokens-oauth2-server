@@ -63,7 +63,6 @@
         </modules>
 
     </qdl>
-     <!-- Major difference is that the workspace is configured to be in silent mode. -->
     <qdl name="run-it"
             enabled="true"
             server_mode="false">
