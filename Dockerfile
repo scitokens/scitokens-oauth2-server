@@ -154,9 +154,6 @@ ENV PATH="${ST_HOME}/bin:${QDL_HOME}/bin:${PATH}"
 RUN "${QDL_HOME}/var/scripts/boot.qdl"
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 
-# RUN "${QDL_HOME}/var/scripts/boot.qdl"
-
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 
 
 
