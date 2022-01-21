@@ -43,14 +43,14 @@
         />
 
         <clientManagement>
-           <api protocol="rfc7951"
+           <api protocol="rfc7591"
                 enabled="true"
                 endpoint="oidc-cm"
                 anonymousOK="true"
                 autoApprove="true"
                 template="localhost:template"
            />
-           <api protocol="rfc7952" enable="true" endpoint="oidc-cm"/>
+           <api protocol="rfc7592" enable="true" endpoint="oidc-cm"/>
            <api protocol="oa4mp" enable="false" />
         </clientManagement>
 
