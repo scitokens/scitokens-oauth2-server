@@ -1,4 +1,4 @@
-#! /usr/bin/env -S qdl-run
+#! /usr/bin/env qdl-run
 
 assert[is_defined(os_env().'ST_HOME')]['Environment variable ST_HOME is not defined. Exiting...'];
 

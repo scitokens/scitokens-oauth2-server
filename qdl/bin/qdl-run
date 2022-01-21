@@ -2,9 +2,6 @@
 
 CFG_FILE="$QDL_HOME/etc/qdl-cfg.xml"
 CFG_NAME="run-it"
-QDL_JAR="$ST_HOME/lib/scitokens-cli.jar"
+QDL_JAR="$QDL_HOME/lib/qdl.jar"
 
-cfgFile=${1:-$CFG_FILE}
-cfgName=${2:-$CFG_NAME}
-
-java -cp $QDL_JAR edu.uiuc.ncsa.qdl.workspace.QDLWorkspace -cfg  $cfgFile -name $cfgName -home_dir $QDL_HOME -run "$@"
+java -cp $QDL_JAR edu.uiuc.ncsa.qdl.workspace.QDLWorkspace -cfg  $CFG_FILE -name $CFG_NAME -home_dir $QDL_HOME -run "$@"

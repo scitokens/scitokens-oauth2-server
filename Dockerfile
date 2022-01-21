@@ -102,8 +102,7 @@ chgrp tomcat /opt/scitokens-server/etc/server-config.xml
 
 ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
 RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
-chmod +x /opt/scitokens-server/bin/scitokens-cli \
-    \
+chmod +x /opt/scitokens-server/bin/scitokens-cli
 
 ADD scitokens-server/etc/client-template.xml /opt/scitokens-server/bin/client-template.xml
 
@@ -112,7 +111,9 @@ RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
 
 # QDL support 21-01-2021
-RUN mkdir -p /opt/qdl/bin && mkdir -p /opt/qdl/etc && mkdir -p /opt/qdl/var && mkdir -p /opt/qdl/var/modules && mkdir -p /opt/qdl/var/scripts && mkdir -p /opt/qdl/var/ws && mkdir -p /opt/qdl/log
+RUN mkdir -p /opt/qdl/bin && mkdir -p /opt/qdl/lib && mkdir -p /opt/qdl/etc && mkdir -p /opt/qdl/var && mkdir -p /opt/qdl/var/modules && mkdir -p /opt/qdl/var/scripts && mkdir -p /opt/qdl/var/ws && mkdir -p /opt/qdl/log
+
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/qdl.jar >/opt/qdl/lib/qdl.jar
 
 RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/math-x.mdl > /opt/qdl/var/modules/math-x.mdl ;\
   chgrp tomcat /opt/qdl/var/modules/math-x.mdl ;\
@@ -121,6 +122,7 @@ RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/mat
 RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/ext.mdl > /opt/qdl/var/modules/ext.mdl ;\
   chgrp tomcat /opt/qdl/var/modules/ext.mdl ;\
   chmod 640 /opt/qdl/var/modules/ext.mdl
+
 
 ADD qdl/readme.txt /opt/qdl/readme.txt
 ADD qdl/etc/qdl.properties /opt/qdl/etc/qdl.properties
@@ -132,6 +134,9 @@ RUN chmod +x /opt/qdl/bin/qdl
 
 ADD qdl/bin/qdl-run /opt/qdl/bin/qdl-run
 RUN chmod +x /opt/qdl/bin/qdl-run
+
+ADD qdl/var/scripts/boot.qdl /opt/qdl/var/scripts/boot.qdl
+RUN chmod +x /opt/qdl/var/scripts/boot.qdl
 # END QDL support
 
 
@@ -144,11 +149,12 @@ ENV CATALINA_BASE=/opt/tomcat
 ENV CATALINA_OPTS="-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 ENV JAVA_OPTS="-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Djava.library.path=/opt/tomcat/lib"
 ENV ST_HOME="/opt/scitokens-server"
-ENV QDL_HOME="${ST_HOME}/qdl"
+ENV QDL_HOME="/opt/qdl"
 ENV PATH="${ST_HOME}/bin:${QDL_HOME}/bin:${PATH}"
+
+RUN "${QDL_HOME}/var/scripts/boot.qdl"
 
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 
-RUN "${QDL_HOME}/var/scripts/boot.qdl"
 
 
