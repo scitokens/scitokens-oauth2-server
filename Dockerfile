@@ -104,8 +104,9 @@ ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
 RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
-ADD "scitokens-server/etc/client-template.xml" "/opt/scitokens-server/bin/client-template.xml"
-
+ADD scitokens-server/etc/client-template.xml /opt/scitokens-server/etc/client-template.xml
+ADD scitokens-server/var/qdl/scitokens/st.qdl /opt/scitokens-server/var/qdl/scitokens/st.qdl
+RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/st.qdl
 RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
