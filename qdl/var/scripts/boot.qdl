@@ -3,8 +3,7 @@
 assert[is_defined(os_env().'ST_HOME')]['Environment variable ST_HOME is not defined. Exiting...'];
 
 st_home := os_env().'ST_HOME'; // get the scitokens home directory from the environment
-id :='localhost:template';
-
+template_dir = st_home + '/etc/templates';
 /*
     Set up access to the client store using the current server configuration.
 */
@@ -12,15 +11,37 @@ module_import('oa2:/qdl/store', 'clients');
 clients#init(st_home+'/etc/server-config.xml', 'scitokens-server', 'client');
 // At this point we don't want to just overwrite an existing template since
 // there may be customizations that the admin has added.
+
+files. := dir(template_dir);
+files. := ~mask(files.,   '.*xml' =~ files.); // regex match on those that end in .xml
 if[
-    clients#read(id) != null
-  ][
-    say('Warning, but ' + id + ' already exists in the store. Update it manually. Exiting...');
-    return();
-  ];
-/*
-    Read in the XML format template, save it.
-*/
-template. := clients#from_xml(file_read(st_home + '/etc/client-template.xml'));
-clients#save(template.);
+   size(files.) == 0
+ ][
+   say('(no templates.)');
+   return();
+];
+say('processing ' + size(files.) + ' templates from ' + template_dir);
+while[
+   for_next(t, files.)
+ ][
+   template. := clients#from_xml(file_read(template_dir + '/' + t));
+   if[
+      !is_defined(template.'client_id')
+   ][
+      say('warning -- file "' + t + '" is not a client template. skipping')
+   ]else[
+     if[
+          clients#read(template.'client_id') != null
+        ][
+          clients#save(template.);
+        ]else[
+          say('Warning, but ' + id + ' already exists in the store. Update it manually. Skipping');
+       ];
+   ];
+]; // end while
+
+say('done!');
+
+
+
 
