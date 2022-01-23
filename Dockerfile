@@ -80,7 +80,7 @@ RUN chmod 644 /opt/tomcat/webapps/scitokens-server/WEB-INF/web.xml
 RUN curl -s -L https://github.com/javaee/javamail/releases/download/JAVAMAIL-1_6_2/javax.mail.jar > /opt/tomcat/lib/javax.mail.jar
 
 # Make JWK a volume mount
-RUN mkdir -p /opt/scitokens-server/bin && mkdir -p /opt/scitokens-server/etc && mkdir -p /opt/scitokens-server/lib && mkdir -p /opt/scitokens-server/log && mkdir -p /opt/scitokens-server/var/qdl/scitokens && mkdir -p /opt/scitokens-server/var/storage/file_store
+RUN mkdir -p /opt/scitokens-server/bin && mkdir -p /opt/scitokens-server/etc && mkdir -p /opt/scitokens-server/etc/templates && mkdir -p /opt/scitokens-server/lib && mkdir -p /opt/scitokens-server/log && mkdir -p /opt/scitokens-server/var/qdl/scitokens && mkdir -p /opt/scitokens-server/var/storage/file_store
 
 # Create a single key in the etc directory for signing
 
@@ -104,7 +104,8 @@ ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
 RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
-ADD scitokens-server/etc/templates/client-template.xml /opt/scitokens-server/etc/client-template.xml
+ADD scitokens-server/etc/templates/client-template.xml /opt/scitokens-server/etc/templates/client-template.xml
+ADD scitokens-server/etc/templates/readme.txt /opt/scitokens-server/etc/templates/readme.txt
 ADD scitokens-server/var/qdl/scitokens/st.qdl /opt/scitokens-server/var/qdl/scitokens/st.qdl
 RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/st.qdl
 RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
@@ -125,7 +126,6 @@ RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/ext
   chmod 640 /opt/qdl/var/modules/ext.mdl
 
 
-ADD qdl/readme.txt /opt/qdl/readme.txt
 ADD qdl/etc/qdl.properties /opt/qdl/etc/qdl.properties
 ADD qdl/etc/qdl-cfg.xml /opt/qdl/etc/qdl-cfg.xml
 ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
