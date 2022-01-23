@@ -23,6 +23,9 @@
               <editor
                  name="nano"
                  exec="/bin/nano"/>
+               <editor
+                  name="vi"
+                  exec="/bin/vi"/>
            </editors>
             <logging
                    logFileName="/opt/qdl/log/qdl.log"

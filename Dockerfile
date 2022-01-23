@@ -118,16 +118,6 @@ java -jar /tmp/oa2-qdl-installer.jar -dir /opt/qdl
 
 RUN  mkdir -p /opt/qdl/var/scripts
 
-#RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/qdl.jar >/opt/qdl/lib/qdl.jar
-
-#RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/math-x.mdl > /opt/qdl/var/modules/math-x.mdl ;\
-#  chgrp tomcat /opt/qdl/var/modules/math-x.mdl ;\
-#  chmod 640 /opt/qdl/var/modules/math-x.mdl
-
-#RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/ext.mdl > /opt/qdl/var/modules/ext.mdl ;\
-#  chgrp tomcat /opt/qdl/var/modules/ext.mdl ;\
-#  chmod 640 /opt/qdl/var/modules/ext.mdl
-
 ADD qdl/etc/qdl.properties /opt/qdl/etc/qdl.properties
 ADD qdl/etc/qdl-cfg.xml /opt/qdl/etc/qdl-cfg.xml
 
@@ -139,6 +129,9 @@ RUN chmod +x /opt/qdl/bin/qdl
 
 ADD qdl/bin/qdl-run /opt/qdl/bin/qdl-run
 RUN chmod +x /opt/qdl/bin/qdl-run
+
+# This adds syntax highlighting for QDL.
+ADD qdl/nano ~/.nanorc
 # END QDL support
 
 
