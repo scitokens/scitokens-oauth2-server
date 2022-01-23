@@ -3,7 +3,7 @@
 assert[is_defined(os_env().'ST_HOME')]['Environment variable ST_HOME is not defined. Exiting...'];
 
 st_home := os_env().'ST_HOME'; // get the scitokens home directory from the environment
-template_dir = st_home + '/etc/templates';
+template_dir := st_home + '/etc/templates';
 /*
     Set up access to the client store using the current server configuration.
 */
@@ -28,7 +28,7 @@ while[
    if[
       !is_defined(template.'client_id')
    ][
-      say('warning -- file "' + t + '" is not a client template. skipping')
+      say('warning -- file "' + t + '" is not a client template. skipping');
    ]else[
      if[
           clients#read(template.'client_id') != null
