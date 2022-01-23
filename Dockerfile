@@ -11,7 +11,7 @@ ENV container docker
 #rm -f /lib/systemd/system/anaconda.target.wants/*;
 #VOLUME [ "/sys/fs/cgroup" ]
 
-RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make
+RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make nano
 #RUN alternatives --set java /usr/lib/jvm/java-11-openjdk/bin/java && \
 #alternatives --set javac /usr/lib/jvm/java-11-openjdk/bin/javac
 
