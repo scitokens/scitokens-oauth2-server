@@ -131,7 +131,7 @@ ADD qdl/bin/qdl-run /opt/qdl/bin/qdl-run
 RUN chmod +x /opt/qdl/bin/qdl-run
 
 # This adds syntax highlighting for QDL.
-ADD qdl/nano ~/.nanorc
+ADD qdl/nano /root/.nanorc
 # END QDL support
 
 
