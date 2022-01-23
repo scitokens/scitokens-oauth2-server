@@ -54,11 +54,11 @@
             </module>
             <module type="qdl"
                  import_on_start="true">
-                 <path>/opt/qdl/var/modules/math-x.mdl</path>
+                 <path>/opt/qdl/etc/modules/math-x.mdl</path>
             </module>
             <module type="qdl"
                   import_on_start="true">
-                 <path>/opt/qdl/var/modules/ext.mdl</path>
+                 <path>/opt/qdl/etc/modules/ext.mdl</path>
             </module>
         </modules>
 
@@ -95,11 +95,11 @@
                </module>
                <module type="qdl"
                     import_on_start="true">
-                    <path>/opt/qdl/var/modules/math-x.mdl</path>
+                    <path>/opt/qdl/etc/modules/math-x.mdl</path>
                </module>
                <module type="qdl"
                      import_on_start="true">
-                    <path>/opt/qdl/var/modules/ext.mdl</path>
+                    <path>/opt/qdl/etc/modules/ext.mdl</path>
                </module>
            </modules>
     </qdl>

@@ -113,22 +113,24 @@ RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
 
 # QDL support 21-01-2021
-RUN mkdir -p /opt/qdl/bin && mkdir -p /opt/qdl/lib && mkdir -p /opt/qdl/etc && mkdir -p /opt/qdl/var && mkdir -p /opt/qdl/var/modules && mkdir -p /opt/qdl/var/scripts && mkdir -p /opt/qdl/var/ws && mkdir -p /opt/qdl/log
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
+java -jar /tmp/oa2-qdl-installer.jar -dir /opt/qdl
 
-RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/qdl.jar >/opt/qdl/lib/qdl.jar
+RUN  mkdir -p /opt/qdl/var/scripts
 
-RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/math-x.mdl > /opt/qdl/var/modules/math-x.mdl ;\
-  chgrp tomcat /opt/qdl/var/modules/math-x.mdl ;\
-  chmod 640 /opt/qdl/var/modules/math-x.mdl
+#RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/qdl.jar >/opt/qdl/lib/qdl.jar
 
-RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/ext.mdl > /opt/qdl/var/modules/ext.mdl ;\
-  chgrp tomcat /opt/qdl/var/modules/ext.mdl ;\
-  chmod 640 /opt/qdl/var/modules/ext.mdl
+#RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/math-x.mdl > /opt/qdl/var/modules/math-x.mdl ;\
+#  chgrp tomcat /opt/qdl/var/modules/math-x.mdl ;\
+#  chmod 640 /opt/qdl/var/modules/math-x.mdl
 
+#RUN curl -s -L https://github.com/ncsa/security-lib/releases/download/v5.2.3/ext.mdl > /opt/qdl/var/modules/ext.mdl ;\
+#  chgrp tomcat /opt/qdl/var/modules/ext.mdl ;\
+#  chmod 640 /opt/qdl/var/modules/ext.mdl
 
 ADD qdl/etc/qdl.properties /opt/qdl/etc/qdl.properties
 ADD qdl/etc/qdl-cfg.xml /opt/qdl/etc/qdl-cfg.xml
-ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
+
 ADD qdl/var/scripts/boot.qdl /opt/qdl/var/scripts/boot.qdl
 RUN chmod +x /opt/qdl/var/scripts/boot.qdl
 

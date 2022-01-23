@@ -15,7 +15,7 @@ clients#init(st_home+'/etc/server-config.xml', 'scitokens-server', 'client');
 
 files. := dir(template_dir);
 if[
-   files. == null || size(files.) == 0
+   size(files.) == 0
  ][
    say('(no templates.)');
    return();
@@ -38,9 +38,9 @@ while[
      if[
           clients#read(template.'client_id') == null
         ][
-          say('Warning, but "' + id + '" already exists in the store. Update it manually. Skipping');
-        ]else[
           clients#save(template.);
+        ]else[
+          say('Warning, but "' + id + '" already exists in the store. Update it manually. Skipping');
        ];
    ];
 ]; // end while
