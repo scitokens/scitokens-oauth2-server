@@ -11,7 +11,7 @@ ENV container docker
 #rm -f /lib/systemd/system/anaconda.target.wants/*;
 #VOLUME [ "/sys/fs/cgroup" ]
 
-RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make nano
+RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make
 #RUN alternatives --set java /usr/lib/jvm/java-11-openjdk/bin/java && \
 #alternatives --set javac /usr/lib/jvm/java-11-openjdk/bin/javac
 
@@ -107,6 +107,8 @@ chmod +x /opt/scitokens-server/bin/scitokens-cli
 ADD scitokens-server/etc/templates/client-template.xml /opt/scitokens-server/etc/templates/client-template.xml
 ADD scitokens-server/etc/templates/readme.txt /opt/scitokens-server/etc/templates/readme.txt
 ADD scitokens-server/var/qdl/scitokens/st.qdl /opt/scitokens-server/var/qdl/scitokens/st.qdl
+# Java 11 apparently does not identify the mime type for .json files quite right.
+ADD scitokens-server/var/qdl/user-config.json /opt/scitokens-server/var/qdl/scitokens/user-config.txt
 RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/st.qdl
 RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 
@@ -131,11 +133,10 @@ ADD qdl/bin/qdl-run /opt/qdl/bin/qdl-run
 RUN chmod +x /opt/qdl/bin/qdl-run
 
 # This adds syntax highlighting for QDL.
+RUN yum install -y nano
+
 ADD qdl/nano /root/.nanorc
 # END QDL support
-
-
-#CMD ["/usr/sbin/ini"]
 
 ENV JAVA_HOME=/usr/lib/jvm/jre
 ENV CATALINA_PID=/opt/tomcat/temp/tomcat.pid

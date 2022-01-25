@@ -1,5 +1,12 @@
 #! /usr/bin/env qdl-run
 
+/*
+   Boot script in QDL to set up a new OA4MP issuer install. This is run exactly
+   once before the system is started the first time. This will read in all the
+   template files for clients in ${ST_HOME}/etc/templates and ingest them into
+   OA4MP's client store.
+*/
+
 assert[is_defined(os_env().'ST_HOME')]['Environment variable ST_HOME is not defined. Exiting...'];
 
 st_home := os_env().'ST_HOME'; // get the scitokens home directory from the environment
@@ -22,8 +29,8 @@ if[
 ];
 
 files. := ~mask(files.,   '.*xml' =~ files.); // regex match on those that end in .xml
-
 say('processing ' + size(files.) + ' templates from ' + template_dir);
+
 while[
    for_next(t, files.)
  ][
