@@ -110,7 +110,7 @@ ADD scitokens-server/var/qdl/scitokens/st.qdl /opt/scitokens-server/var/qdl/scit
 RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/st.qdl
 # Java 11 apparently does not identify the mime type for .json files quite right.
 ADD scitokens-server/var/qdl/user-config.json /opt/scitokens-server/var/qdl/user-config.txt
-RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/user-config.txt
+RUN chgrp tomcat /opt/scitokens-server/var/qdl/user-config.txt
 RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
