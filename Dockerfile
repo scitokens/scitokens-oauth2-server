@@ -66,7 +66,7 @@ chgrp -R tomcat  /opt/tomcat/conf/Catalina
 #RUN systemctl enable tomcat.service
 
 COPY --chown=tomcat:tomcat scitokens-server /opt
-RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/5.2.4/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
+RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.2.4/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
 jar -xf ../scitokens-server.war ;\
