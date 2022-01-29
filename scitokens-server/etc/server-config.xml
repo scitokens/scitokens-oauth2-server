@@ -14,8 +14,8 @@
              debug="trace"
              OIDCEnabled = "false"
              serverDN="CN=localhost"
-             issuer="https://hcc-anvil-175-26.unl.edu/scitokens-server"
-             address="https://hcc-anvil-175-26.unl.edu/scitokens-server"
+             issuer="https://{HOSTNAME}/scitokens-server"
+             address="https://{HOSTNAME}/scitokens-server"
              demoModeEnabled="true">
 
         <logging
@@ -34,9 +34,9 @@
         <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>
         </JSONWebKey>
-        <authorizationServlet authorizationURI="https://hcc-anvil-175-26.unl.edu/scitokens-server/authorize"/>
+        <authorizationServlet authorizationURI="https://{HOSTNAME}/scitokens-server/authorize"/>
         <deviceFlowServlet
-                verificationURI="https://hcc-anvil-175-26.unl.edu/scitokens-server/device"
+                verificationURI="https://{HOSTNAME}/scitokens-server/device"
                 interval="5"
                 codeChars="0123456789ABCDEFX"
                 codeLength="9"

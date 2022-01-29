@@ -11,13 +11,12 @@ ENV container docker
 #rm -f /lib/systemd/system/anaconda.target.wants/*;
 #VOLUME [ "/sys/fs/cgroup" ]
 
-RUN yum install -y curl java-11-openjdk java-11-openjdk-devel openssl-devel apr-devel gcc gcc-c++ make
-#RUN alternatives --set java /usr/lib/jvm/java-11-openjdk/bin/java && \
-#alternatives --set javac /usr/lib/jvm/java-11-openjdk/bin/javac
+RUN yum install -y curl java-11-openjdk java-11-openjdk-devel
 
+# Download and install tomcat
 RUN useradd -r -s /sbin/nologin tomcat ;\
 mkdir -p /opt/tomcat ;\
-curl -s -L https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.45/bin/apache-tomcat-8.5.45.tar.gz | tar -zxf - -C /opt/tomcat --strip-components=1 ;\
+curl -s -L https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.58/bin/apache-tomcat-9.0.58.tar.gz | tar -zxf - -C /opt/tomcat --strip-components=1 ;\
 chgrp -R tomcat /opt/tomcat/conf ;\
 chmod g+rwx /opt/tomcat/conf ;\
 chmod g+r /opt/tomcat/conf/* ;\
@@ -25,19 +24,6 @@ chown -R tomcat /opt/tomcat/logs/ /opt/tomcat/temp/ /opt/tomcat/webapps/ /opt/to
 chgrp -R tomcat /opt/tomcat/bin /opt/tomcat/lib ;\
 chmod g+rwx /opt/tomcat/bin ;\
 chmod g+r /opt/tomcat/bin/*
-
-RUN cd /opt/tomcat/bin ;\
-tar -zxvf tomcat-native.tar.gz ;\
-cd tomcat-native-1.2.23-src/native ;\
-ls -ald /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/ ;\
-ls -al /usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64/ ;\
-./configure --with-apr=/usr/bin/apr-1-config --with-java-home=/usr/lib/jvm/java-11-openjdk-11.0.8.10-0.el7_8.x86_64 --with-os-type=include/linux --with-ssl=yes --prefix=/opt/tomcat ;\
-mv Makefile Makefile.org ;\
-sed s+/include/include/linux+/include/linux+g Makefile.org > Makefile ;\
-make ;\
-make install ;\
-chgrp -R tomcat /opt/tomcat/lib ;\
-rm -f /opt/tomcat/conf/server.xml
 
 ADD server.xml /opt/tomcat/conf/server.xml
 RUN chgrp -R tomcat /opt/tomcat/conf/server.xml ;\
@@ -89,15 +75,15 @@ chgrp tomcat /opt/scitokens-server/etc/keys.jwk ;\
 chmod 640 /opt/scitokens-server/etc/keys.jwk
 
 # Make server configuration a volume mount
-ARG SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443
 ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
-RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc/server-config.xml.tmpl | \
-  sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
-  sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
+#RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc/server-config.xml.tmpl | \
+#  sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
+#  sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
 #  sed s+ID_GOES_HERE+$(grep kid /opt/scitokens-server/etc/scitokens.jwk | awk -F : 'NR==1{print $2};' | tr -d '", ')+g | sed s+/PATH/TO/JSON_WEBKEY_FILE+/opt/scitokens-server/etc/scitokens.jwk+g | \
-  sed s+/opt/oa2/var/storage/scitokens-erver+/opt/tomcat/var/storage/scitokens-server+g | \
-  sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/etc/server-config.xml ;\
-chgrp tomcat /opt/scitokens-server/etc/server-config.xml
+#  sed s+/opt/oa2/var/storage/scitokens-erver+/opt/tomcat/var/storage/scitokens-server+g | \
+#  sed 's+mail enabled="true"+mail enabled="false"+g' > /opt/scitokens-server/etc/server-config.xml ;\
+#RUN sed s+\{HOSTNAME\} /opt/scitokens-server/etc/server-config.xml.tmpl > /opt/scitokens-server/etc/server-config.xml
+#RUN chgrp tomcat /opt/scitokens-server/etc/server-config.xml
 
 ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
 RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.2.4/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
@@ -131,11 +117,6 @@ RUN chmod +x /opt/qdl/bin/qdl
 
 ADD qdl/bin/qdl-run /opt/qdl/bin/qdl-run
 RUN chmod +x /opt/qdl/bin/qdl-run
-
-# This adds syntax highlighting for QDL.
-RUN yum install -y nano
-
-ADD qdl/nano /root/.nanorc
 # END QDL support
 
 ENV JAVA_HOME=/usr/lib/jvm/jre
@@ -148,8 +129,9 @@ ENV ST_HOME="/opt/scitokens-server"
 ENV QDL_HOME="/opt/qdl"
 ENV PATH="${ST_HOME}/bin:${QDL_HOME}/bin:${PATH}"
 
-RUN "${QDL_HOME}/var/scripts/boot.qdl"
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+#RUN "${QDL_HOME}/var/scripts/boot.qdl"
+ADD start.sh /start.sh
+CMD ["/start.sh"]
 
 
 

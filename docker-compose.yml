@@ -1,21 +1,22 @@
 version: '3'
 services:
-  scitokens-tomcat:
-    build: .
+  lightweight-issuer:
+    #image: hub.opensciencegrid.org/sciauth/lightweight-token-issuer
+    build: docker-scitokens-java
+    volumes:
+      - ./user-config.json:/opt/scitokens-server/var/qdl/user-config.txt
+      #- /etc/letsencrypt/live/hcc-anvil-175-26.unl.edu/cert.pem:/opt/tomcat/conf/hostcert.pem
+      #- /etc/letsencrypt/live/hcc-anvil-175-26.unl.edu/fullchain.pem:/opt/tomcat/conf/hostcert.pem
+      #- /etc/letsencrypt/live/hcc-anvil-175-26.unl.edu/privkey.pem:/opt/tomcat/conf/hostkey.pem
+      - ./keys.jwk:/opt/scitokens-server/etc/keys.jwk
+      - ./file_store:/opt/scitokens-server/var/storage/file_store
 
-    #image: scitokens/c7-token-server
-    #privileged: true
-    #cap_add:
-    #  - SYS_ADMIN
-    #security_opt:
-    #  - seccomp:unconfined
-    #tmpfs:
-    #  - /run
-    #  - /run/lock
-    #volumes:
-    #  - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    environment:
+      - HOSTNAME=<hostname>
+
+
     ports:
-      - "8443:8443"
-      - "8080:8080"
-    #hostname: localhost.localdomain
-    #domainname: localdomain
+      - "443:8443"
+      - "80:8080"
+
+
