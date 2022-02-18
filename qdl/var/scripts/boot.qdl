@@ -43,7 +43,7 @@ while[
    // At this point we don't want to just overwrite an existing template since
    // there may be customizations that the admin has added.
      if[
-          clients#read(template.'client_id') == null
+          size(clients#read(template.'client_id')) == 0
         ][
           clients#save(template.);
         ]else[
