@@ -15,8 +15,7 @@
              OIDCEnabled = "false"
              serverDN="CN=localhost"
              issuer="https://{HOSTNAME}/scitokens-server"
-             address="https://{HOSTNAME}/scitokens-server"
-             demoModeEnabled="true">
+             address="https://{HOSTNAME}/scitokens-server">
 
         <logging
                 logFileName="/opt/scitokens-server/log/scitokens-server.log"
@@ -24,26 +23,16 @@
                 logSize="100000"
                 logFileCount="2"
                 debug="trace"/>
-
-<!--
-     <authorizationServlet useHeader="true"
-                              requireHeader="true"
-                              headerFieldName="REMOTE_USER"
-        />
--->
         <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>
         </JSONWebKey>
         <!-- Remove the next authorizationServlet if using a proxy -->
-        <authorizationServlet authorizationURI="https://{HOSTNAME}/scitokens-server/authorize"/>
-        <!--  remove demoModeEnabled from service element if this is uncommented.
+        <!--<authorizationServlet authorizationURI="https://{HOSTNAME}/scitokens-server/authorize"/>-->
        <authorizationServlet
                 useProxy="true"
                 cfgFile="/opt/scitokens-server/etc/proxy-config.xml"
                 cfgName="proxy-client"
         />
-
-        -->
         <deviceFlowServlet
                 verificationURI="https://{HOSTNAME}/scitokens-server/device"
                 interval="5"
