@@ -34,7 +34,16 @@
         <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>
         </JSONWebKey>
+        <!-- Remove the next authorizationServlet if using a proxy -->
         <authorizationServlet authorizationURI="https://{HOSTNAME}/scitokens-server/authorize"/>
+        <!--  remove demoModeEnabled from service element if this is uncommented.
+       <authorizationServlet
+                useProxy="true"
+                cfgFile="/opt/scitokens-server/etc/proxy-config.xml"
+                cfgName="proxy-client"
+        />
+
+        -->
         <deviceFlowServlet
                 verificationURI="https://{HOSTNAME}/scitokens-server/device"
                 interval="5"

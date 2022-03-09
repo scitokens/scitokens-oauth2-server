@@ -76,6 +76,7 @@ chmod 640 /opt/scitokens-server/etc/keys.jwk
 
 # Make server configuration a volume mount
 ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
+ADD scitokens-server/etc/proxy-config.xml /opt/scitokens-server/etc/proxy-config.xml.tmpl
 #RUN sed s+oa4mp:scitokens.fileStore+scitokens-server+g /opt/scitokens-server/etc/server-config.xml.tmpl | \
 #  sed s+address.of.your.server+${SCITOKENS_SERVER_ADDRESS}+g | \
 #  sed s+/path/to/log/file+/opt/tomcat/logs/scitokens-server.log+g | \
@@ -101,7 +102,7 @@ RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
 
 # QDL support 21-01-2021
-RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.2.4/oa2-qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/5.2-sci-auth/oa2-qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
 java -jar /tmp/oa2-qdl-installer.jar -dir /opt/qdl
 
 RUN  mkdir -p /opt/qdl/var/scripts

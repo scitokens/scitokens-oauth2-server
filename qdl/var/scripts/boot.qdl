@@ -47,7 +47,7 @@ while[
         ][
           clients#save(template.);
         ]else[
-          say('Warning, but "' + id + '" already exists in the store. Update it manually. Skipping');
+          say('Warning, but "' + t + '" already exists in the store. Update it manually. Skipping');
        ];
    ];
 ]; // end while
