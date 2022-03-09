@@ -16,7 +16,6 @@
             <scope>email</scope>
             <scope>openid</scope>
             <scope>profile</scope>
-            <scope>edu.uiuc.ncsa.myproxy.getcert</scope>
             <scope>org.cilogon.userinfo</scope>
         </scopes>
         <memoryStore><assetStore/></memoryStore>
