@@ -1,4 +1,4 @@
-<service>
+<config>
     <client name="proxy-client">
         <logging
                 logFileName="/tmp/oa4mp-oauth2-fs-client.xml"
@@ -22,4 +22,4 @@
         <memoryStore><assetStore/></memoryStore>
     </client>
 
-</service>
+</config>
