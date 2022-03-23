@@ -16,4 +16,4 @@
               eta. := get_claims(create_source(cfg.), claims.'sub');
 
 access_token.scope := detokenize(unique(eta.EPE), ' ', 2); // turn in to string, omit duplications, trailing space
-access_token.'aud':= eta.'audience';
+access_token.'aud' := eta.'audience';
