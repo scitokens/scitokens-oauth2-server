@@ -11,6 +11,13 @@
       "storage.write:/home/some_group/dweitzel"
     ]
   },
+  "http://cilogon.org/serverA/users/6849": {
+    "eduPersonEntitlement": [
+      "storage.read:/home/some_group/jgaynor",
+      "storage.write:/home/some_group/jgaynor"
+    ],
+    "audience": "ANY"
+  },
   "default_claim": {
     "comment": [
       "This is the default claim returned by the handler **if** you specify use_default",
