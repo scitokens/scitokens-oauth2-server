@@ -2,6 +2,13 @@
    Basic script to fetch the capabilities for a user (by eppn here) and
    put it in the scopes for the access token.
 */
+define[
+   stAud(x.)
+ ][
+   aud_caput := 'aud:';
+   xi. := mask(x., starts_with(x., aud_caput) == 0); // only those that start with the caput
+   return(substring(xi., size(aud_caput)));
+ ];
 
                EPE := 'eduPersonEntitlement';
 
@@ -16,4 +23,6 @@
               eta. := get_claims(create_source(cfg.), claims.'sub');
 
 access_token.scope := detokenize(unique(eta.EPE), ' ', 2); // turn in to string, omit duplications, trailing space
-access_token.'aud' := eta.'audience';
+if[is_defined(eta.'audience')][access_token.'aud' := eta.'audience';];
+xi. := stAud(scopes.);
+if[0<size(xi.)][access_token.'aud' := xi.;];
