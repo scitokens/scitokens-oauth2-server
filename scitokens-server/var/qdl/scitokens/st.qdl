@@ -26,3 +26,14 @@ access_token.scope := detokenize(unique(eta.EPE), ' ', 2); // turn in to string,
 if[is_defined(eta.'audience')][access_token.'aud' := eta.'audience';];
 xi. := stAud(scopes.);
 if[0<size(xi.)][access_token.'aud' := xi.;];
+if[
+   is_defined(claims.'eppn')
+][
+   access_token.'sub' := claims.'eppn';
+]else[
+  if[
+     is_defined(claims.'email')
+  ][
+   access_token.'sub' := claims.'email';
+  ];
+];
