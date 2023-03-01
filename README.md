@@ -1,132 +1,61 @@
 # Scitokens Server Docker Image
 
-This repository contains a Docker image to install the [SciTokens Java
-Server and Client](https://github.com/scitokens/scitokens-java) and run them
-from an Apache Tomcat server with basic authentication.
+This repository contains a Docker image to install the Scitokens Lightweight Issuer based on the [SciTokens Java
+Server](https://github.com/scitokens/scitokens-java).  The issuer facilitates users to acquire tokens which can be used to authenticate with other services.
 
-The image is configured with a set of `--build-args` to `docker build`. The
-SciTokens server is always installed and the SciTokens client can be
-optionally installed as well.
+
+
+The image is hosted on the OSG hub [lightweight-token-issuer](https://hub.opensciencegrid.org/harbor/projects/613/repositories/lightweight-token-issuer?publicAndNotLogged=yes)
+
 
 ## Prerequisites
 
-The Dockerfile expects that an X509 host certificate and key pair exists in
-this directory with the names `hostcert.pem` and `hostkey.pem`. Obtain these
-files and add them to this directory before building the Docker image. The
-[.gitignore](https://github.com/scitokens/docker-scitokens-java/blob/master/.gitignore) 
-file will prevent these files being added to the repository.
+For the lightweight token issuer to function, it needs:
 
-## Building the Docker image
+- Docker installed
+- Host Certificates to enable TLS (HTTPS) connections
+- JSON Web Keys for the issuer
+- Issuer policy file
+- Registered client with CILogon
 
-The build arguments for the Docker images are:
+### Host Certificates
 
-| Argument | Meaning | Default |
-| -------- | ------- | ------- |
-| `TOMCAT_ADMIN_USERNAME` | Username for the Tomcat Admin account | admin |
-| `TOMCAT_ADMIN_PASSWORD` | Password for the Tomcat Admin account | password |
-| `TOMCAT_ADMIN_IP` | Regular expression for [access to the Tomcat manager](https://tomcat.apache.org/tomcat-8.5-doc/manager-howto.html#Configuring_Manager_Application_Access) | 127.0.0.1 |
-| `SCITOKENS_SERVER_ADDRESS` | The address and port used by Tomcat | 127.0.0.1:8443 |
-| `INSTALL_SCITOKENS_CLIENT` | If `true` also install the SciTokens client | `false` |
+Host certificates secure the communication between the client and this issuer.  The easiest way to retrieve host certificates is to acquire them from letsencrypt.  This tutorial is adapted from [Digital Ocean's](https://www.digitalocean.com/community/tutorials/how-to-use-certbot-standalone-mode-to-retrieve-let-s-encrypt-ssl-certificates-on-centos-7) tutorial for CentOS 7.
 
-Using an appropriate set of build arguments, 
+Install the certbot tool:
 
-```sh
-docker build \
-  --build-arg TOMCAT_ADMIN_USERNAME=admin \
-  --build-arg TOMCAT_ADMIN_PASSWORD=password \
-  --build-arg TOMCAT_ADMIN_IP=127.0.0.1 \
-  --build-arg SCITOKENS_SERVER_ADDRESS=127.0.0.1:8443 \
-  --rm -t scitokens/c7-token-server .
-```
+    $ sudo yum --enablerepo=extras install epel-release
+    $ sudo yum install certbot
 
-To also install the client, add `--build-arg INSTALL_SCITOKENS_CLIENT=true`
+Confirm that certbot is installed:
 
-## Starting the Docker Image
+    $ certbot --version
+    certbot 1.11.0
 
-Edit the file `docker-compose.yml` and change the default `hostname` and
-`domainname` (currently localhost.localdomain) to appropriate values for the
-machine that you are using, then start the docker container with
+**NOTE:** Certbot must be able to listen on port 80 to external connections.  The firewall must be open on port 80 to successfully receive a certificate. 
 
-```sh
-docker-compose up --detach
-```
+Request the certificate challenges:
 
-## Registering a client
+    $ sudo certbot certonly --standalone --preferred-challenges http -d example.com
 
-If your `SCITOKENS_SERVER_ADDRESS` is `my.host.org:8443` then the SciTokens server
-will be available to register clients at
-`https://my.host.org:8443/scitokens-server/register`
+Where `example.com` is replaced with the full hostname of your host.  Once you have run the command, it will prompt you for your email and a few other questions.  Once it is complete, it should tell you where the host certificates are stored, usually under `/etc/letsencrypt/live/*`
 
-Go to the appropriate URL and register a client. An example for registering
-the Java client is shown below.
 
-![Scitokens Server Client Registration](scitokens-server-screen.png)
+### JSON Web Keys
 
-## Approving a client
+The JSON web keys are used to sign tokens issued by the issuer.  They are generated from the docker container.  You will only need to keep these keys saved.
 
-Once a client has been registered, it needs to be approved. This can be done
-by running
-```sh
-docker exec -it docker-scitokens-java_scitokens-tomcat_1 /opt/scitokens-server/bin/scitokens-cli
-```
-which launches the command line interface. Documentation for the CLI is
-available in the [OA4MP CLI documentation](http://grid.ncsa.illinois.edu/myproxy/oauth/server/manuals/cli.xhtml).
+    $ sudo docker run --rm  hub.opensciencegrid.org/sciauth/lightweight-token-issuer generate_jwk.sh > keys.jwk
 
-First issue the `use clients` command,
-followed by `ls` to list available clients. Clients that are not approved are 
-flagged with `(N)` in the second column. To approve a client you need the 
-`client_id_string` which is in the third column (before the client name).
+If this is the first time running the lightweight token issuer container, it may take some time to download and extract the container.  Once completed, the jwks.json should be populated with the keys.  Save those keys, as you will need them when running the issuer.
 
-Next run `approve /client_id_string` (note the `/` at the start of 
-the `client_id_string` which is not printed by `ls`). Provide an 
-approver name (which is a free-form string), set the client to approved,
-and save.
+### Configuring permissions
 
-An example session is shown below.
-```
-*************************************************************
-* OA4MP2 OAuth 2/OIDC CLI (Command Line Interpreter)        *
-* Version 4.2-SNAPSHOT                                      *
-* By Jeff Gaynor  NCSA                                      *
-*  (National Center for Supercomputing Applications)        *
-*                                                           *
-* type 'help' for a list of commands                        *
-*      'exit' or 'quit' to end this session.                *
-*************************************************************
-OAuth 2 for MyProxy, version 4.2-SNAPSHOT startup on Wed Sep 25 18:11:48 UTC 2019
-Store contains 1 entries.
-cli>use clients
-Store contains 1 entries.
-  clients >ls
-  0. (N) myproxy:oa4mp,2012:/client_id/193465d162e66dbfd8fffd79fb903e9e (sugwg-scitokens-cond...) created on 2019-09-25T18:09:01.393Z
-  clients >approve /myproxy:oa4mp,2012:/client_id/193465d162e66dbfd8fffd79fb903e9e
-    approver[(null)]:duncan
-    set approved?[n]:y
-    save this approval record [y/n]?y
-    approval saved
-  clients >exit
-exiting ...
-cli>exit
-exiting ...
-```
+    curl -O https://raw.githubusercontent.com/scitokens/docker-scitokens-java/master/scitokens-server/var/qdl/user-config.json
 
-## Configuring the Java Client
+## Starting the image
 
-If you installed the SciTokens Java client, then it will be available at 
-`https://my.host.org:8443/scitokens-client`. Register the client with the server
-using the callback URL `https://my.host.org:8443/scitokens-client/ready`.
 
-Then edit the client's configuration start a login shell on the Docker container with
-```sh
-docker exec -it docker-scitokens-java_scitokens-tomcat_1 /bin/bash -l
-```
-Using `vi`, edit the file
-`/opt/scitokens-client/config/client-config.xml` and set the `CLIENT_IDENTIFIER` and
-`CLIENT_SECRET` to the values returned when you registered the client with the server.
 
-Once this has file has been edited, you need to restart tomcat with
-```sh
-systemctl restart tomcat
-```
-and then the client can be used to obtain a token from the server.
+
 
