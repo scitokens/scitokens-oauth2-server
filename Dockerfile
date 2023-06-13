@@ -87,7 +87,7 @@ ADD scitokens-server/etc/proxy-config.xml /opt/scitokens-server/etc/proxy-config
 #RUN chgrp tomcat /opt/scitokens-server/etc/server-config.xml
 
 ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
-RUN curl -L -s https://github.com/ncsa/OA4MP/releases/latest/download/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/latest/download/cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
 ADD scitokens-server/etc/templates/client-template.xml /opt/scitokens-server/etc/templates/client-template.xml
