@@ -13,10 +13,11 @@
         <authorizeUri>https://cilogon.org/authorize</authorizeUri>
         <wellKnownUri>https://cilogon.org/oauth2/.well-known/openid-configuration</wellKnownUri>
         <scopes>
-            <scope>email</scope>
+            <scope enabled="false">email</scope>
             <scope>openid</scope>
-            <scope>profile</scope>
+            <scope enabled="false">profile</scope>
             <scope>org.cilogon.userinfo</scope>
+            <scope enabled="false">edu.uiuc.ncsa.myproxy.getcert</scope>
         </scopes>
         <memoryStore><assetStore/></memoryStore>
     </client>
