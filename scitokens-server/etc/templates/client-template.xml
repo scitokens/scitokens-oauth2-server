@@ -19,11 +19,12 @@
 <entry key="client_id">localhost:template</entry>
 <entry key="strict_scopes">false</entry>
 <entry key="public_client">true</entry>
+<entry key="forward_scopes_to_proxy">false</entry>
 <entry key="callback_uri">["https://localhost:9443/client2/ready"]</entry>
 <entry key="name">SciToken client template</entry>
 <entry key="creation_ts">2022-01-19T19:55:55.172Z</entry>
 <entry key="df_lifetime">-1</entry>
-<entry key="scopes">["openid"]</entry>
+<entry key="scopes">["openid", "wlcg"]</entry>
 <entry key="email">gaynor@illinois.edu</entry>
 <entry key="df_interval">-1</entry>
 </properties>

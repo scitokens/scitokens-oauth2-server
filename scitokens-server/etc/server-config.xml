@@ -48,6 +48,7 @@
                 endpoint="oidc-cm"
                 anonymousOK="true"
                 autoApprove="true"
+                autoApproverName="anonymous"
                 template="localhost:template"
            />
            <api protocol="rfc7592" enabled="true" endpoint="oidc-cm"/>
@@ -72,7 +73,6 @@
             <virtual_file_systems>
                 <vfs type="pass_through"
                      access="rw">
-                    <!-- Points to my dev environment which is an on-disk clone of the production scripts -->
                     <root_dir>/opt/scitokens-server/var/qdl</root_dir>
                     <scheme><![CDATA[vfs]]></scheme>
                     <mount_point>/scripts</mount_point>
