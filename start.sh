@@ -11,6 +11,14 @@ chgrp tomcat /opt/scitokens-server/etc/proxy-config.xml
 # Run the boot to inject the template
 ${QDL_HOME}/var/scripts/boot.qdl
 
+# Check for the JWKS key
+if [ ! -e /opt/scitokens-server/etc/keys.jwk ]; then
+    echo "Please provide a JWKS key in the file /opt/scitokens-server/etc/keys.jwk.  Please generate it with the following command:"
+    echo "sudo docker run --rm  hub.opensciencegrid.org/sciauth/lightweight-token-issuer generate_jwk.sh > keys.jwk"
+    echo "And volume mount the keys.jwk to /opt/scitokens-server/etc/keys.jwk within the container."
+    exit 1
+fi
+
 # Start tomcat
 exec /opt/tomcat/bin/catalina.sh run
 
