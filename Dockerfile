@@ -52,8 +52,8 @@ chmod +x /opt/scitokens-server/bin/scitokens-cli
 
 ADD scitokens-server/etc/templates/client-template.xml /opt/scitokens-server/etc/templates/client-template.xml
 ADD scitokens-server/etc/templates/readme.txt /opt/scitokens-server/etc/templates/readme.txt
-ADD scitokens-server/var/qdl/scitokens/st.qdl /opt/scitokens-server/var/qdl/scitokens/st.qdl
-RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/st.qdl
+ADD scitokens-server/var/qdl/scitokens/policies.qdl /opt/scitokens-server/var/qdl/scitokens/policies.qdl
+RUN chgrp tomcat /opt/scitokens-server/var/qdl/scitokens/policies.qdl
 # Java 11 apparently does not identify the mime type for .json files quite right.
 ADD scitokens-server/var/qdl/user-config.json /opt/scitokens-server/var/qdl/user-config.txt
 RUN chgrp tomcat /opt/scitokens-server/var/qdl/user-config.txt

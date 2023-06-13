@@ -53,6 +53,12 @@ If this is the first time running the lightweight token issuer container, it may
 
     curl -O https://raw.githubusercontent.com/scitokens/docker-scitokens-java/master/scitokens-server/var/qdl/user-config.json
 
+## Configuring policies with QDL
+
+Configuration of token issueance policies can be configured with [QDL](https://qdl-lang.org/) programming language.  Then entry point of qdl is policies.qdl.  Bind mount any extra qdl files in `/opt/scitokens-server/etc/qdl/*`
+
+Example of QDL files can be found on the [OA4MP](https://github.com/ncsa/oa4mp/tree/master/server-admin/src/main/resources/qdl) repo.
+
 ## Starting the image
 
 

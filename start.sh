@@ -19,6 +19,12 @@ if [ ! -e /opt/scitokens-server/etc/keys.jwk ]; then
     exit 1
 fi
 
+# check for one or more files in a directory
+if [ -e /opt/scitokens-server/etc/qdl/ ]; then
+    cp -r /opt/scitokens-server/etc/qdl/*.qdl /opt/scitokens-server/var/qdl/
+    chown -R tomcat /opt/scitokens-server/var/qdl/
+fi
+
 # Start tomcat
 exec /opt/tomcat/bin/catalina.sh run
 
