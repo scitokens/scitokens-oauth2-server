@@ -1,4 +1,4 @@
-FROM hub.opensciencegrid.org/opensciencegrid/software-base:3.6-el8-release
+FROM hub.opensciencegrid.org/opensciencegrid/software-base:3.6-al8-release
 
 RUN yum install -y curl java-11-openjdk java-11-openjdk-devel
 
