@@ -21,7 +21,7 @@ fi
 
 # check for one or more files in a directory
 if [ -e /opt/scitokens-server/etc/qdl/ ]; then
-    cp -r /opt/scitokens-server/etc/qdl/*.qdl /opt/scitokens-server/var/qdl/
+    cp -r /opt/scitokens-server/etc/qdl/*.qdl /opt/scitokens-server/var/qdl/scitokens/
     chown -R tomcat /opt/scitokens-server/var/qdl/
 fi
 
