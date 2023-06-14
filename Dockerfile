@@ -30,7 +30,7 @@ RUN cat /opt/tomcat/conf/incommon-igtf.pem /opt/tomcat/conf/comodo-rsa.pem /opt/
 #RUN systemctl enable tomcat.service
 
 COPY --chown=tomcat:tomcat scitokens-server /opt
-RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.3.1/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
+RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.2.7.1/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
 mkdir -p /opt/tomcat/webapps/scitokens-server ;\
 cd /opt/tomcat/webapps/scitokens-server ;\
 jar -xf ../scitokens-server.war ;\
@@ -48,14 +48,17 @@ RUN curl -s -L https://github.com/javaee/javamail/releases/download/JAVAMAIL-1_6
 RUN mkdir -p /opt/scitokens-server/bin && mkdir -p /opt/scitokens-server/etc && mkdir -p /opt/scitokens-server/etc/templates && mkdir -p /opt/scitokens-server/lib && mkdir -p /opt/scitokens-server/log && mkdir -p /opt/scitokens-server/var/qdl/scitokens && mkdir -p /opt/scitokens-server/var/storage/file_store
 
 # Create a single key in the etc directory for signing
-RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.3.1/jwt.jar > /opt/scitokens-server/lib/jwt.jar
+RUN curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.2.7.1/jwt.jar > /opt/scitokens-server/lib/jwt.jar ;\
+java -jar /opt/scitokens-server/lib/jwt.jar -batch create_keys -single -out /opt/scitokens-server/etc/keys.jwk ;\
+chgrp tomcat /opt/scitokens-server/etc/keys.jwk ;\
+chmod 640 /opt/scitokens-server/etc/keys.jwk
 
 # Make server configuration a volume mount
 ADD scitokens-server/etc/server-config.xml /opt/scitokens-server/etc/server-config.xml.tmpl
 ADD scitokens-server/etc/proxy-config.xml /opt/scitokens-server/etc/proxy-config.xml.tmpl
 
 ADD scitokens-server/bin/scitokens-cli /opt/scitokens-server/bin/scitokens-cli
-RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.3.1/cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.2.7.1/oa2-cli.jar >/opt/scitokens-server/lib/scitokens-cli.jar ;\
 chmod +x /opt/scitokens-server/bin/scitokens-cli
 
 ADD scitokens-server/etc/templates/client-template.xml /opt/scitokens-server/etc/templates/client-template.xml
@@ -70,7 +73,7 @@ RUN ln -s /usr/lib64/libapr-1.so.0 /opt/tomcat/lib/libapr-1.so.0
 ADD generate_jwk.sh /usr/local/bin/generate_jwk.sh
 
 # QDL support 21-01-2021
-RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.3.1/oa2-qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
+RUN curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.2.7.1/oa2-qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
 java -jar /tmp/oa2-qdl-installer.jar -dir /opt/qdl
 
 RUN  mkdir -p /opt/qdl/var/scripts
