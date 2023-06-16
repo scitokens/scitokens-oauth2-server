@@ -21,7 +21,10 @@ fi
 
 # check for one or more files in a directory
 if [ -e /opt/scitokens-server/etc/qdl/ ]; then
-    cp -r /opt/scitokens-server/etc/qdl/*.qdl /opt/scitokens-server/var/qdl/scitokens/
+    # Note that `-L` is added here; this is because Kubernetes sets up some volume mounts
+    # as symlinks and `-r` will copy the symlinks (which then becomes broken).  `-L` will
+    # dereference the symlink and copy the data, which is what we want.
+    cp -rL /opt/scitokens-server/etc/qdl/*.qdl /opt/scitokens-server/var/qdl/scitokens/
     chown -R tomcat /opt/scitokens-server/var/qdl/
 fi
 
