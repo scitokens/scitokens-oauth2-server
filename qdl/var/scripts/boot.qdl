@@ -1,4 +1,4 @@
-#! /usr/bin/env qdl-run
+#!/usr/bin/env qdl-run
 
 /*
    Boot script in QDL to set up a new OA4MP issuer install. This is run exactly

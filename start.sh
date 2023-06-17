@@ -8,6 +8,9 @@ sed s+\{CLIENT_SECRET\}+$CLIENT_SECRET+g > /opt/scitokens-server/etc/proxy-confi
 chgrp tomcat /opt/scitokens-server/etc/server-config.xml
 chgrp tomcat /opt/scitokens-server/etc/proxy-config.xml
 
+# Set the path in case the bash profile reset it from the container default.
+export PATH="${ST_HOME}/bin:${QDL_HOME}/bin:${PATH}"
+
 # Run the boot to inject the template
 ${QDL_HOME}/var/scripts/boot.qdl
 
@@ -40,6 +43,23 @@ if [ -e /opt/scitokens-server/etc/trusted-cas ]; then
     done
     shopt -u nullglob
 
+fi
+
+# Tomcat requires us to provide the intermediate chain (which, in Kubernetes, is often in the same
+# file as the host certificate itself.  If there wasn't one provided, try splitting it out.
+if [ ! -e /opt/tomcat/conf/chain.pem ]; then
+    echo "No chain present for host cert; trying to derive one"
+    pushd /tmp > /dev/null
+    if csplit -f tls- -b "%02d.crt.pem" -s -z "/opt/tomcat/conf/hostcert.pem" '/-----BEGIN CERTIFICATE-----/' '{1}' 2>/dev/null ; then
+        echo "Chain present in hostcert.pem; using it."
+        cp /tmp/tls-01.crt.pem /opt/tomcat/conf/chain.pem
+        rm /tmp/tls-*.crt.pem
+    else
+        echo "No chain present; will use empty file"
+        # No intermediate CAs found.  Create an empty file.
+        touch /opt/tomcat/conf/chain.pem
+    fi
+    popd > /dev/null
 fi
 
 # Start tomcat
