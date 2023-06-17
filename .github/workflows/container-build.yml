@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: False
       matrix:
-        repo: ['development', 'testing', 'release']
+        repo: ['release']
     steps:
     - uses: actions/checkout@v2
 
