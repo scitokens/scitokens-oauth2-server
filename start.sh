@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Set the hostname
 sed s+\{HOSTNAME\}+$HOSTNAME+g /opt/scitokens-server/etc/server-config.xml.tmpl > /opt/scitokens-server/etc/server-config.xml
@@ -26,6 +26,20 @@ if [ -e /opt/scitokens-server/etc/qdl/ ]; then
     # dereference the symlink and copy the data, which is what we want.
     cp -rL /opt/scitokens-server/etc/qdl/*.qdl /opt/scitokens-server/var/qdl/scitokens/
     chown -R tomcat /opt/scitokens-server/var/qdl/
+fi
+
+# Load up additional trust roots.  If OA4MP needs to contact a LDAP server, we will need
+# the CA that signed the LDAP server's certificate to be in the java trust store.
+if [ -e /opt/scitokens-server/etc/trusted-cas ]; then
+
+    shopt -s nullglob
+    for fullfile in /opt/scitokens-server/etc/trusted-cas/*.pem; do
+        aliasname=$(basename "$file")
+        aliasname="${filename%.*}"
+        keytool -cacerts -importcert -noprompt -storepass changeit -file "$fullfile" -alias "$aliasname"
+    done
+    shopt -u nullglob
+
 fi
 
 # Start tomcat

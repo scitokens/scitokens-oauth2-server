@@ -18,10 +18,9 @@
              address="https://{HOSTNAME}/scitokens-server">
 
         <logging
-                logFileName="/opt/scitokens-server/log/scitokens-server.log"
+                logFileName="/dev/stdout"
                 logName="scitokens-server"
-                logSize="100000"
-                logFileCount="2"
+                logFileCount="1"
                 debug="trace"/>
         <JSONWebKey>
             <path><![CDATA[/opt/scitokens-server/etc/keys.jwk]]></path>

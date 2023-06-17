@@ -1,3 +1,4 @@
+#!/bin/sh
 # Run the OA4MP command processor. This will allow you to edit, create or remove
 # clients, approvals, users and archived users. You can also reset the counter and do copy
 # operations from one store to another
