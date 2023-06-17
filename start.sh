@@ -37,6 +37,7 @@ if [ -e /opt/scitokens-server/etc/trusted-cas ]; then
 
     shopt -s nullglob
     for fullfile in /opt/scitokens-server/etc/trusted-cas/*.pem; do
+        echo "Importing CA certificate $fullfile into the Java trusted CA store."
         aliasname=$(basename "$file")
         aliasname="${filename%.*}"
         keytool -cacerts -importcert -noprompt -storepass changeit -file "$fullfile" -alias "$aliasname"
