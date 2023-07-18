@@ -9,6 +9,7 @@
              refreshTokenEnabled="true"
              enableTokenExchange="true"
              clientSecretLength="24"
+             cleanupInterval= "60 min"
              scheme="oa4mp"
              schemeSpecificPart=""
              debug="trace"
@@ -17,6 +18,14 @@
              issuer="https://{HOSTNAME}/scitokens-server"
              address="https://{HOSTNAME}/scitokens-server">
 
+        <unusedClientCleanup gracePeriod="6 hr"
+                             deleteVersions="false"
+                             enabled="true"
+                             interval="4 hr">
+          <whitelist>
+             <clientID>localhost:template</clientID>
+          </whitelist>
+        </unusedClientCleanup>
         <logging
                 logFileName="/dev/stdout"
                 logName="scitokens-server"
