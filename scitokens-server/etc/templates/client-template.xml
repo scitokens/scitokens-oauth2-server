@@ -18,7 +18,7 @@
 <entry key="debug_on">false</entry>
 <entry key="client_id">localhost:template</entry>
 <entry key="strict_scopes">false</entry>
-<entry key="public_client">true</entry>
+<entry key="public_client">false</entry>
 <entry key="forward_scopes_to_proxy">false</entry>
 <entry key="callback_uri">["https://localhost:9443/client2/ready"]</entry>
 <entry key="name">SciToken client template</entry>
