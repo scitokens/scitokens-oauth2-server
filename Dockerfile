@@ -5,7 +5,7 @@ RUN yum install -y curl java-11-openjdk-headless java-11-openjdk-devel
 # Download and install tomcat
 RUN useradd -r -s /sbin/nologin tomcat ;\
     mkdir -p /opt/tomcat ;\
-    curl -s -L https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.69/bin/apache-tomcat-9.0.69.tar.gz | tar -zxf - -C /opt/tomcat --strip-components=1 ;\
+    curl -s -L https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz | tar -zxf - -C /opt/tomcat --strip-components=1 ;\
     chgrp -R tomcat /opt/tomcat/conf ;\
     chmod g+rwx /opt/tomcat/conf ;\
     chmod g+r /opt/tomcat/conf/* ;\
