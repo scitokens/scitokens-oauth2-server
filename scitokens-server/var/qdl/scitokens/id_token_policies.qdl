@@ -1,0 +1,15 @@
+/*
+ Simply prefer the eppn for the subject; otherwise, pass the token through.
+ */
+
+if[
+   is_defined(claims.'eppn')
+][
+   claims.'sub' := claims.'eppn';
+]else[
+  if[
+     is_defined(claims.'email')
+  ][
+   claims.'sub' := claims.'email';
+  ];
+];

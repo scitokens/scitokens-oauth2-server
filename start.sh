@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # Set the hostname
-sed s+\{HOSTNAME\}+$HOSTNAME+g /opt/scitokens-server/etc/server-config.xml.tmpl > /opt/scitokens-server/etc/server-config.xml
+if [ -z "${ISSUER}" ]; then
+ ISSUER="https://${HOSTNAME}/scitokens-server"
+fi
+sed -e s+\{HOSTNAME\}+$HOSTNAME+g -e s+\{ISSUER\}+$ISSUER+g /opt/scitokens-server/etc/server-config.xml.tmpl > /opt/scitokens-server/etc/server-config.xml
 sed s+\{HOSTNAME\}+$HOSTNAME+g /opt/scitokens-server/etc/proxy-config.xml.tmpl | \
 sed s+\{CLIENT_ID\}+$CLIENT_ID+g | \
 sed s+\{CLIENT_SECRET\}+$CLIENT_SECRET+g > /opt/scitokens-server/etc/proxy-config.xml
