@@ -23,17 +23,17 @@ RUN \
     mkdir -p /opt/scitokens-server/var/storage/file_store &&\
     mkdir -p /opt/tomcat/webapps/scitokens-server ;\
     # Install the OA4MP webapp and associated dependencies.
-    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.4.1/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
+    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.4.3/oauth2.war > /opt/tomcat/webapps/scitokens-server.war ;\
     curl -s -L https://github.com/javaee/javamail/releases/download/JAVAMAIL-1_6_2/javax.mail.jar > /opt/tomcat/lib/javax.mail.jar ;\
-    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.4.1/jwt.jar > /opt/scitokens-server/lib/jwt.jar ;\
-    curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.4.1/cli.jar > /opt/scitokens-server/lib/scitokens-cli.jar ;\
+    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v5.4.3/jwt.jar > /opt/scitokens-server/lib/jwt.jar ;\
+    curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.4.3/cli.jar > /opt/scitokens-server/lib/scitokens-cli.jar ;\
     cd /opt/tomcat/webapps/scitokens-server ;\
     jar -xf ../scitokens-server.war ;\
     chgrp -R tomcat /opt/tomcat/webapps/scitokens-server ;\
     mkdir -p /opt/tomcat/var/storage/scitokens-server ;\
     chown -R tomcat:tomcat /opt/tomcat/var/storage/scitokens-server ;\
     # Install support for the QDL CLI
-    curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.4.1/qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
+    curl -L -s https://github.com/ncsa/OA4MP/releases/download/v5.4.3/qdl-installer.jar >/tmp/oa2-qdl-installer.jar ;\
     java -jar /tmp/oa2-qdl-installer.jar -dir /opt/qdl ;\
     rm /tmp/oa2-qdl-installer.jar ;\
     mkdir -p /opt/qdl/var/scripts ;\
