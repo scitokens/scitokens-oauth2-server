@@ -6,4 +6,4 @@ QDL_JAR="$QDL_HOME/lib/qdl.jar"
 cfgFile=${1:-$CFG_FILE}
 cfgName=${2:-$CFG_NAME}
 
-java -cp $QDL_JAR edu.uiuc.ncsa.qdl.workspace.QDLWorkspace -cfg  $cfgFile -name $cfgName -home_dir $QDL_HOME
+java -cp $QDL_JAR org.qdl_lang.workspace.QDLWorkspace -cfg  $cfgFile -name $cfgName -home_dir $QDL_HOME

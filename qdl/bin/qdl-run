@@ -5,4 +5,4 @@ CFG_FILE="$QDL_HOME/etc/qdl-cfg.xml"
 CFG_NAME="run-it"
 QDL_JAR="$QDL_HOME/lib/qdl.jar"
 
-java -cp $QDL_JAR edu.uiuc.ncsa.qdl.workspace.QDLWorkspace -cfg  $CFG_FILE -name $CFG_NAME -home_dir $QDL_HOME -run "$@"
+java -cp $QDL_JAR org.qdl_lang.workspace.QDLWorkspace -cfg  $CFG_FILE -name $CFG_NAME -home_dir $QDL_HOME -run "$@"

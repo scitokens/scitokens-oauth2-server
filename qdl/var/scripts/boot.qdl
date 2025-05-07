@@ -16,7 +16,7 @@ template_dir := st_home + '/etc/templates';
 /*
     Set up access to the client store using the current server configuration.
 */
-module_import('oa2:/qdl/store', 'clients');
+module_import('oa4mp:/qdl/store', 'clients');
 clients#init(st_home+'/etc/server-config.xml', 'scitokens-server', 'client');
 
 

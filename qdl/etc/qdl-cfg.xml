@@ -45,15 +45,15 @@
         <modules>
             <module type="java"
                     import_on_start="true">
-                <class_name>edu.uiuc.ncsa.myproxy.oa4mp.qdl.OA2QDLLoader</class_name>
+                <class_name>org.oa4mp.server.loader.qdl.OA2QDLLoader</class_name>
             </module>
             <module type="java"
                     import_on_start="true">
-                <class_name>edu.uiuc.ncsa.oa2.qdl.QDLToolsLoader</class_name>
+                <class_name>org.oa4mp.server.qdl.QDLToolsLoader</class_name>
             </module>
             <module type="java"
                     import_on_start="false">
-                <class_name>edu.uiuc.ncsa.oa2.qdl.storage.StoreAccessLoader</class_name>
+                <class_name>org.oa4mp.server.qdl.storage.StoreAccessLoader</class_name>
             </module>
             <module type="qdl"
                  import_on_start="true">
@@ -86,15 +86,15 @@
            <modules>
                <module type="java"
                        import_on_start="true">
-                   <class_name>edu.uiuc.ncsa.myproxy.oa4mp.qdl.OA2QDLLoader</class_name>
+                   <class_name>org.oa4mp.server.loader.qdl.OA2QDLLoader</class_name>
                </module>
                <module type="java"
                        import_on_start="true">
-                   <class_name>edu.uiuc.ncsa.oa2.qdl.QDLToolsLoader</class_name>
+                   <class_name>org.oa4mp.server.qdl.QDLToolsLoader</class_name>
                </module>
                <module type="java"
                        import_on_start="false">
-                   <class_name>edu.uiuc.ncsa.oa2.qdl.storage.StoreAccessLoader</class_name>
+                   <class_name>org.oa4mp.server.qdl.storage.StoreAccessLoader</class_name>
                </module>
                <module type="qdl"
                     import_on_start="true">
