@@ -1,8 +1,8 @@
-ARG BASE_OSG_SERIES=23
 ARG BASE_OS=el9
-ARG BASE_YUM_REPO=release
+ARG OSG_SERIES=24
+ARG OSG_REPO=release
 
-FROM hub.opensciencegrid.org/osg-htc/software-base:${BASE_OSG_SERIES}-${BASE_OS}-${BASE_YUM_REPO}
+FROM hub.opensciencegrid.org/osg-htc/software-base:${OSG_SERIES}-${BASE_OS}-${OSG_REPO}
 
 RUN <<ENDRUN
     # Ensure that errors cause the build to fail.
