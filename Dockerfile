@@ -38,9 +38,9 @@ RUN <<ENDRUN
     chown tomcat:tomcat /opt/scitokens-server/var/storage/file_store
 
     # Install the OA4MP webapp and associated dependencies.
-    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v6.0.3/oauth2.war > /opt/tomcat/webapps/scitokens-server.war
-    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v6.0.3/jwt.jar > /opt/scitokens-server/lib/jwt.jar
-    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v6.0.3/cli.jar > /opt/scitokens-server/lib/scitokens-cli.jar
+    curl -s -L https://github.com/ncsa/OA4MP/releases/download/mutable/oauth2.war > /opt/tomcat/webapps/scitokens-server.war
+    curl -s -L https://github.com/ncsa/OA4MP/releases/download/mutable/jwt.jar > /opt/scitokens-server/lib/jwt.jar
+    curl -s -L https://github.com/ncsa/OA4MP/releases/download/mutable/cli.jar > /opt/scitokens-server/lib/scitokens-cli.jar
     curl -s -L https://github.com/javaee/javamail/releases/download/JAVAMAIL-1_6_2/javax.mail.jar > /opt/tomcat/lib/javax.mail.jar
 
     ( cd /opt/tomcat/webapps/scitokens-server && jar -xf /opt/tomcat/webapps/scitokens-server.war )
@@ -51,7 +51,7 @@ RUN <<ENDRUN
     chown -R tomcat:tomcat /opt/tomcat/var/storage/scitokens-server
 
     # Install support for the QDL CLI.
-    curl -s -L https://github.com/ncsa/OA4MP/releases/download/v6.0.3/qdl-installer.jar >/tmp/oa2-qdl-installer.jar
+    curl -s -L https://github.com/ncsa/OA4MP/releases/download/mutable/qdl-installer.jar >/tmp/oa2-qdl-installer.jar
     java -jar /tmp/oa2-qdl-installer.jar install -all -dir /opt/qdl
     rm /tmp/oa2-qdl-installer.jar
     mkdir -p /opt/qdl/var/scripts
